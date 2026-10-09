@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obfuscador Lua</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d0d0d;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', monospace;
+    padding: 1rem;
+    min-height: 100vh;
+  }
+  h1 {
+    color: #00ff88;
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+  }
+  .sub {
+    color: #666;
+    font-size: 0.75rem;
+    margin-bottom: 1.2rem;
+  }
+  .panel {
+    background: #161616;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .panel h2 {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.6rem;
+  }
+  textarea {
+    width: 100%;
+    height: 220px;
+    background: #0a0a0a;
+    color: #00ff88;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    padding: 0.8rem;
+    font-family: monospace;
+    font-size: 12px;
+    resize: vertical;
+    outline: none;
+  }
+  textarea:focus { border-color: #00ff88; }
+  button {
+    background: #00ff88;
+    color: #000;
+    border: none;
+    padding: 0.8rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 0.8rem;
+    width: 100%;
+    transition: background 0.2s;
+  }
+  button:hover { background: #00cc6a; }
+  button:disabled { background: #333; color: #666; }
+  .status {
+    font-size: 0.75rem;
+    color: #666;
+    text-align: center;
+    margin-top: 0.5rem;
+    min-height: 1rem;
+  }
+</style>
+</head>
+<body>
+
+<h1>Obfuscador Lua / Luau</h1>
+<p class="sub">Ofusca e criptografa scripts para Roblox</p>
+
+<div class="panel">
+  <h2>Entrada</h2>
+  <textarea id="input" placeholder="Cole seu script Lua aqui..."></textarea>
+  <button id="btn" onclick="obfuscate()">Ofuscar</button>
+  <div class="status" id="status"></div>
+</div>
+
+<div class="panel">
+  <h2>Saída ofuscada</h2>
+  <textarea id="output" readonly placeholder="O resultado aparece aqui..."></textarea>
+  <button onclick="copyOut()">Copiar resultado</button>
+</div>
+
+<script>
+const XOR_KEY = 0x5A;
+
+function minify(code) {
+  let out = '';
+  let i = 0;
+  let inString = false;
+  let stringChar = '';
+  let inLongString = false;
+  let inComment = false;
+  let inLongComment = false;
+
+  while (i < code.length) {
+    const c = code[i];
+    const next = code[i + 1];
+
+    if (inLongComment) {
+      if (c === ']' && code.slice(i, i + 2) === ']]') {
+        inLongComment = false;
+        i += 2;
+        continue;
+      }
+      i++;
+      continue;
+    }
+
+    if (inLongString) {
+      out += c;
+      if (c === ']' && code.slice(i, i + 2) === ']]') {
+        out += ']';
+        inLongString = false;
+        i += 2;
+        continue;
+      }
+      i++;
+      continue;
+    }
+
+    if (inComment) {
+      if (c === '\n') {
+        inComment = false;
+        out += '\n';
+      }
+      i++;
+      continue;
+    }
+
+    if (inString) {
+      out += c;
+      if (c === '\\') {
+        out += next || '';
+        i += 2;
+        continue;
+      }
+      if (c === stringChar) {
+        inString = false;
+      }
+      i++;
+      continue;
+    }
+
+    if (c === '-' && next === '-') {
+      if (code.slice(i, i + 4) === '--[[') {
+        inLongComment = true;
+        i += 4;
+        continue;
+      }
+      inComment = true;
+      i += 2;
+      continue;
+    }
+
+    if (c === '[' && code.slice(i, i + 2) === '[[') {
+      inLongString = true;
+      out += '[[';
+      i += 2;
+      continue;
+    }
+
+    if (c === '"' || c === "'") {
+      inString = true;
+      stringChar = c;
+      out += c;
+      i++;
+      continue;
+    }
+
+    out += c;
+    i++;
+  }
+
+  // Colapsa espaços em branco excessivos
+  out = out.replace(/[ \t]+/g, ' ');
+  out = out.replace(/\n\s*\n/g, '\n');
+  return out.trim();
+}
+
+function obfuscateLua(code) {
+  // 1. Minifica
+  let minified = minify(code);
+
+  // 2. Criptografa strings
+  minified = minified.replace(/(["'])((?:\\.|(?!\1).)*)\1/g, (m, q, content) => {
+    const bytes = [];
+    for (let i = 0; i < content.length; i++) {
+      bytes.push(content.charCodeAt(i) ^ XOR_KEY);
+    }
+    return `__d({${bytes.join(',')}},${XOR_KEY})`;
+  });
+
+  // 3. Header de descriptografia
+  const header = `local function __d(t,k)local s={}for i=1,#t do s[i]=string.char(bit32.bxor(t[i],k))end return table.concat(s)end\n`;
+
+  return header + minified;
+}
+
+function obfuscate() {
+  const input = document.getElementById('input').value;
+  const status = document.getElementById('status');
+  const btn = document.getElementById('btn');
+
+  if (!input.trim()) {
+    status.textContent = 'Cola algum código primeiro.';
+    return;
+  }
+
+  btn.disabled = true;
+  status.textContent = 'Ofuscando...';
+
+  try {
+    setTimeout(() => {
+      document.getElementById('output').value = obfuscateLua(input);
+      status.textContent = 'Pronto.';
+      btn.disabled = false;
+    }, 50);
+  } catch (e) {
+    status.textContent = 'Erro: ' + e.message;
+    btn.disabled = false;
+  }
+}
+
+function copyOut() {
+  const out = document.getElementById('output');
+  if (!out.value) return;
+  out.select();
+  out.setSelectionRange(0, 99999);
+  document.execCommand('copy');
+  document.getElementById('status').textContent = 'Copiado.';
+}
+</script>
+
+</body>
+</html>
