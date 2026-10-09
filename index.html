@@ -3,107 +3,654 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Obfuscador Lua</title>
+<title>LC10 • OFUSCADOR</title>
+<link rel="icon" type="image/png" href="logo.png">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: #0d0d0d;
-    color: #e0e0e0;
-    font-family: 'Segoe UI', monospace;
-    padding: 1rem;
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #0a0a0a;
+    --panel: #131313;
+    --panel-2: #0f0f0f;
+    --border: #222;
+    --border-2: #2a2a2a;
+    --accent: #00ff88;
+    --accent-dim: #00cc6a;
+    --text: #e0e0e0;
+    --muted: #666;
+    --muted-2: #888;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     min-height: 100vh;
+    overflow-x: hidden;
   }
-  h1 {
-    color: #00ff88;
-    font-size: 1.3rem;
-    margin-bottom: 0.3rem;
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1.2rem;
   }
-  .sub {
-    color: #666;
+
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .logo-img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+
+  .logo {
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .logo span {
+    color: var(--muted-2);
+    font-weight: 400;
+    margin: 0 4px;
+  }
+
+  .menu-btn {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    padding: 4px 8px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  /* MENU */
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 200;
+  }
+
+  .menu-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 260px;
+    max-width: 80vw;
+    height: 100vh;
+    background: var(--panel);
+    border-left: 1px solid var(--border);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 300;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .menu.active { transform: translateX(0); }
+
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .menu-title {
     font-size: 0.75rem;
+    color: var(--muted-2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .menu-close {
+    background: transparent;
+    border: none;
+    color: var(--muted-2);
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.9rem 1rem;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    border: 1px solid transparent;
+  }
+
+  .menu a:active,
+  .menu a.active {
+    background: var(--panel-2);
+    color: var(--accent);
+    border-color: var(--border-2);
+  }
+
+  .menu a .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: background 0.2s;
+  }
+
+  .menu a.active .dot { background: var(--accent); }
+
+  /* MAIN */
+  main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 1.5rem 1.2rem 4rem;
+  }
+
+  .view { display: none; animation: fadeIn 0.35s ease; }
+  .view.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* HERO */
+  .hero {
+    margin-bottom: 2rem;
+  }
+
+  .hero h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero .by {
+    font-size: 0.8rem;
+    color: var(--muted-2);
     margin-bottom: 1.2rem;
   }
+
+  .hero .by strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .info-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    font-size: 0.82rem;
+    color: var(--muted-2);
+    line-height: 1.6;
+  }
+
+  .info-box b { color: var(--text); }
+
+  .info-box ul {
+    list-style: none;
+    margin-top: 0.5rem;
+  }
+
+  .info-box ul li {
+    padding-left: 1rem;
+    position: relative;
+    margin-bottom: 0.3rem;
+  }
+
+  .info-box ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  /* PANEL */
   .panel {
-    background: #161616;
-    border: 1px solid #2a2a2a;
-    border-radius: 8px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
     padding: 1rem;
     margin-bottom: 1rem;
   }
-  .panel h2 {
+
+  .panel-label {
     font-size: 0.7rem;
-    color: #888;
+    color: var(--muted-2);
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 0.6rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
+
+  .panel-label .badge {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+
   textarea {
     width: 100%;
     height: 220px;
-    background: #0a0a0a;
-    color: #00ff88;
-    border: 1px solid #2a2a2a;
-    border-radius: 4px;
-    padding: 0.8rem;
-    font-family: monospace;
+    background: var(--panel-2);
+    color: var(--accent);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    padding: 0.9rem;
+    font-family: 'Consolas', 'Monaco', monospace;
     font-size: 12px;
+    line-height: 1.5;
     resize: vertical;
     outline: none;
+    transition: border-color 0.2s;
   }
-  textarea:focus { border-color: #00ff88; }
-  button {
-    background: #00ff88;
-    color: #000;
-    border: none;
-    padding: 0.8rem;
-    font-weight: bold;
-    font-size: 0.9rem;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 0.8rem;
+
+  textarea:focus { border-color: var(--accent); }
+
+  textarea::placeholder { color: #444; }
+
+  /* BUTTONS */
+  button.btn {
     width: 100%;
-    transition: background 0.2s;
+    padding: 0.85rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    font-family: inherit;
   }
-  button:hover { background: #00cc6a; }
-  button:disabled { background: #333; color: #666; }
+
+  button.btn-primary {
+    background: var(--accent);
+    color: #000;
+    margin-top: 0.8rem;
+  }
+
+  button.btn-primary:active { background: var(--accent-dim); }
+  button.btn-primary:disabled { background: #2a2a2a; color: #555; }
+
+  button.btn-secondary {
+    background: var(--panel-2);
+    color: var(--accent);
+    border: 1px solid var(--border-2);
+    margin-top: 0.5rem;
+  }
+
+  button.btn-secondary:active { background: #1a1a1a; }
+
+  button.btn-ghost {
+    background: transparent;
+    color: var(--muted-2);
+    border: 1px solid var(--border);
+    margin-top: 0.5rem;
+    font-weight: 500;
+  }
+
   .status {
     font-size: 0.75rem;
-    color: #666;
+    color: var(--muted);
     text-align: center;
-    margin-top: 0.5rem;
+    margin-top: 0.6rem;
     min-height: 1rem;
+    transition: color 0.2s;
+  }
+
+  .status.ok { color: var(--accent); }
+  .status.err { color: #ff5566; }
+
+  .output-section {
+    display: none;
+    animation: fadeIn 0.35s ease;
+  }
+
+  .output-section.visible { display: block; }
+
+  /* CREDITS */
+  .credits-hero {
+    text-align: center;
+    padding: 1rem 0 2rem;
+  }
+
+  .credits-avatar-img {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    margin: 0 auto 1.2rem;
+    display: block;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.25));
+  }
+
+  .credits-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.3px;
+  }
+
+  .credits-tag {
+    font-size: 0.8rem;
+    color: var(--muted-2);
+    margin-top: 0.3rem;
+  }
+
+  .credits-grid {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+  }
+
+  .credits-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+  }
+
+  .credits-card h3 {
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.6rem;
+  }
+
+  .credits-card p {
+    font-size: 0.82rem;
+    color: var(--muted-2);
+    line-height: 1.6;
+  }
+
+  .credits-card p + p { margin-top: 0.4rem; }
+
+  .credits-card .highlight {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .credits-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.72rem;
+    color: #444;
+    letter-spacing: 1px;
+  }
+
+  .key-input {
+    width: 100%;
+    background: var(--panel-2);
+    color: var(--accent);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    padding: 0.7rem 0.9rem;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+    outline: none;
+    margin-bottom: 0.8rem;
+  }
+
+  .key-input:focus { border-color: var(--accent); }
+
+  .key-hint {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
   }
 </style>
 </head>
 <body>
 
-<h1>Obfuscador Lua / Luau</h1>
-<p class="sub">Ofusca e criptografa scripts para Roblox</p>
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <img src="logo.png" alt="LC10" class="logo-img">
+    <div class="logo">LC10 <span>•</span> OFUSCADOR</div>
+  </div>
+  <button class="menu-btn" onclick="toggleMenu()">☰</button>
+</header>
 
-<div class="panel">
-  <h2>Entrada</h2>
-  <textarea id="input" placeholder="Cole seu script Lua aqui..."></textarea>
-  <button id="btn" onclick="obfuscate()">Ofuscar</button>
-  <div class="status" id="status"></div>
-</div>
+<!-- MENU OVERLAY -->
+<div class="menu-overlay" id="overlay" onclick="toggleMenu()"></div>
 
-<div class="panel">
-  <h2>Saída ofuscada</h2>
-  <textarea id="output" readonly placeholder="O resultado aparece aqui..."></textarea>
-  <button onclick="copyOut()">Copiar resultado</button>
-</div>
+<!-- MENU LATERAL -->
+<nav class="menu" id="menu">
+  <div class="menu-header">
+    <span class="menu-title">Menu</span>
+    <button class="menu-close" onclick="toggleMenu()">✕</button>
+  </div>
+
+  <a onclick="showView('view-code')" id="nav-code" class="active">
+    <span class="dot"></span> Ofuscar Código
+  </a>
+  <a onclick="showView('view-loadstring')" id="nav-loadstring">
+    <span class="dot"></span> Ofuscar Loadstring
+  </a>
+  <a onclick="showView('view-credits')" id="nav-credits">
+    <span class="dot"></span> Créditos
+  </a>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- ================= VIEW: OFUSCAR CÓDIGO ================= -->
+  <section class="view active" id="view-code">
+    <div class="hero">
+      <h1>Ofuscar Código</h1>
+      <p class="by">Feito por <strong>x.lusca1 LC10</strong></p>
+
+      <div class="info-box">
+        <b>O que faz:</b>
+        <ul>
+          <li>Minifica o código Lua/Luau</li>
+          <li>Remove comentários</li>
+          <li>Renomeia variáveis locais</li>
+          <li>Criptografa todas as strings</li>
+          <li>Funciona 100% no seu navegador</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-label">
+        <span>Entrada</span>
+        <span class="badge">LUA / LUAU</span>
+      </div>
+      <textarea id="input-code" placeholder="Cole seu script Lua aqui..."></textarea>
+      <button class="btn btn-primary" id="btn-code" onclick="obfuscateCode()">Ofuscar</button>
+      <div class="status" id="status-code"></div>
+    </div>
+
+    <div class="output-section" id="output-code">
+      <div class="panel">
+        <div class="panel-label">
+          <span>Saída ofuscada</span>
+          <span class="badge">PRONTO</span>
+        </div>
+        <button class="btn btn-secondary" onclick="copyCode()">📋 Copiar código</button>
+        <button class="btn btn-ghost" onclick="downloadCode()">⬇ Baixar como .text</button>
+        <textarea id="result-code" readonly style="margin-top:0.8rem;" placeholder="Resultado..."></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VIEW: OFUSCAR LOADSTRING ================= -->
+  <section class="view" id="view-loadstring">
+    <div class="hero">
+      <h1>Ofuscar Loadstring</h1>
+      <p class="by">Feito por <strong>x.lusca1 LC10</strong></p>
+
+      <div class="info-box">
+        <b>O que faz:</b>
+        <ul>
+          <li>Envelopa o script num loader protegido</li>
+          <li>Criptografa todo o bytecode com XOR</li>
+          <li>Usa chave personalizada</li>
+          <li>Saída pronta pra colar no executor</li>
+          <li>Dificulta interceptação do <b>loadstring</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-label">
+        <span>Entrada</span>
+        <span class="badge">LOADSTRING</span>
+      </div>
+      <textarea id="input-ls" placeholder="Cole seu script Lua aqui..."></textarea>
+
+      <div class="panel-label" style="margin-top:1rem;">
+        <span>Chave de criptografia</span>
+      </div>
+      <input type="text" id="key-ls" class="key-input" placeholder="ex: LC10xAn0n" value="LC10xAn0n">
+      <p class="key-hint">Guarde essa chave. Você vai precisar dela pra rodar o script protegido. Também vai aparecer embutida no loader — se quiser trocar, mude aqui antes de ofuscar.</p>
+
+      <button class="btn btn-primary" id="btn-ls" onclick="obfuscateLoadstring()">Ofuscar Loadstring</button>
+      <div class="status" id="status-ls"></div>
+    </div>
+
+    <div class="output-section" id="output-ls">
+      <div class="panel">
+        <div class="panel-label">
+          <span>Loader protegido</span>
+          <span class="badge">PRONTO</span>
+        </div>
+        <button class="btn btn-secondary" onclick="copyLS()">📋 Copiar código</button>
+        <button class="btn btn-ghost" onclick="downloadLS()">⬇ Baixar como .text</button>
+        <textarea id="result-ls" readonly style="margin-top:0.8rem;" placeholder="Resultado..."></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VIEW: CRÉDITOS ================= -->
+  <section class="view" id="view-credits">
+    <div class="credits-hero">
+      <img src="logo.png" alt="LC10" class="credits-avatar-img">
+      <div class="credits-name">x.lusca1 LC10</div>
+      <div class="credits-tag">Criador e desenvolvedor</div>
+    </div>
+
+    <div class="credits-grid">
+      <div class="credits-card">
+        <h3>Sobre o projeto</h3>
+        <p>O <span class="highlight">LC10 • OFUSCADOR</span> foi criado com o objetivo de proteger scripts Lua/Luau para Roblox de forma simples, rápida e acessível.</p>
+        <p>Tudo roda direto no navegador — sem servidor, sem cadastro, sem enrolação.</p>
+      </div>
+
+      <div class="credits-card">
+        <h3>Como funciona</h3>
+        <p>O ofuscador combina várias técnicas:</p>
+        <p><span class="highlight">Minificação</span> → remove espaços e comentários inúteis</p>
+        <p><span class="highlight">Renomeação</span> → troca nomes de variáveis locais</p>
+        <p><span class="highlight">Criptografia XOR</span> → ofusca todas as strings do script</p>
+        <p><span class="highlight">Loader protegido</span> → envelopa o script num wrapper criptografado</p>
+      </div>
+
+      <div class="credits-card">
+        <h3>Versão</h3>
+        <p>Versão atual: <span class="highlight">v1.0</span></p>
+        <p>Suporte: Lua 5.1, Luau (Roblox)</p>
+        <p>Plataforma: navegador (mobile e desktop)</p>
+      </div>
+
+      <div class="credits-card">
+        <h3>Agradecimentos</h3>
+        <p>Feito com dedicação para a comunidade de scripting do Roblox.</p>
+        <p>Se usar o projeto, mantenha os créditos.</p>
+      </div>
+
+      <div class="credits-card">
+        <h3>Aviso</h3>
+        <p>O criador <span class="highlight">não se responsabiliza</span> pelo uso indevido dos scripts gerados por esta ferramenta. Use com responsabilidade.</p>
+      </div>
+    </div>
+
+    <div class="credits-footer">
+      © LC10 • OFUSCADOR — por x.lusca1 LC10
+    </div>
+  </section>
+
+</main>
 
 <script>
+/* ========== NAVEGAÇÃO ========== */
+function toggleMenu() {
+  document.getElementById('menu').classList.toggle('active');
+  document.getElementById('overlay').classList.toggle('active');
+}
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  const map = {
+    'view-code': 'nav-code',
+    'view-loadstring': 'nav-loadstring',
+    'view-credits': 'nav-credits'
+  };
+  document.getElementById(map[id]).classList.add('active');
+
+  const menu = document.getElementById('menu');
+  if (menu.classList.contains('active')) toggleMenu();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ========== OFUSCADOR - CÓDIGO ========== */
 const XOR_KEY = 0x5A;
 
-function minify(code) {
+function minifyLua(code) {
   let out = '';
   let i = 0;
-  let inString = false;
-  let stringChar = '';
-  let inLongString = false;
-  let inComment = false;
-  let inLongComment = false;
+  let inString = false, stringChar = '';
+  let inLongString = false, inLongComment = false, inComment = false;
 
   while (i < code.length) {
     const c = code[i];
@@ -111,138 +658,228 @@ function minify(code) {
 
     if (inLongComment) {
       if (c === ']' && code.slice(i, i + 2) === ']]') {
-        inLongComment = false;
-        i += 2;
-        continue;
+        inLongComment = false; i += 2; continue;
       }
-      i++;
-      continue;
+      i++; continue;
     }
 
     if (inLongString) {
       out += c;
       if (c === ']' && code.slice(i, i + 2) === ']]') {
-        out += ']';
-        inLongString = false;
-        i += 2;
-        continue;
+        out += ']'; inLongString = false; i += 2; continue;
       }
-      i++;
-      continue;
+      i++; continue;
     }
 
     if (inComment) {
-      if (c === '\n') {
-        inComment = false;
-        out += '\n';
-      }
-      i++;
-      continue;
+      if (c === '\n') { inComment = false; out += '\n'; }
+      i++; continue;
     }
 
     if (inString) {
       out += c;
-      if (c === '\\') {
-        out += next || '';
-        i += 2;
-        continue;
-      }
-      if (c === stringChar) {
-        inString = false;
-      }
-      i++;
-      continue;
+      if (c === '\\') { out += next || ''; i += 2; continue; }
+      if (c === stringChar) inString = false;
+      i++; continue;
     }
 
     if (c === '-' && next === '-') {
-      if (code.slice(i, i + 4) === '--[[') {
-        inLongComment = true;
-        i += 4;
-        continue;
-      }
-      inComment = true;
-      i += 2;
-      continue;
+      if (code.slice(i, i + 4) === '--[[') { inLongComment = true; i += 4; continue; }
+      inComment = true; i += 2; continue;
     }
 
     if (c === '[' && code.slice(i, i + 2) === '[[') {
-      inLongString = true;
-      out += '[[';
-      i += 2;
-      continue;
+      inLongString = true; out += '[['; i += 2; continue;
     }
 
     if (c === '"' || c === "'") {
-      inString = true;
-      stringChar = c;
-      out += c;
-      i++;
-      continue;
+      inString = true; stringChar = c; out += c; i++; continue;
     }
 
     out += c;
     i++;
   }
 
-  // Colapsa espaços em branco excessivos
   out = out.replace(/[ \t]+/g, ' ');
   out = out.replace(/\n\s*\n/g, '\n');
   return out.trim();
 }
 
-function obfuscateLua(code) {
-  // 1. Minifica
-  let minified = minify(code);
+function encryptStringBytes(str) {
+  const bytes = new TextEncoder().encode(str);
+  const out = [];
+  for (let i = 0; i < bytes.length; i++) {
+    out.push(bytes[i] ^ XOR_KEY);
+  }
+  return out;
+}
 
-  // 2. Criptografa strings
+function obfuscateLua(code) {
+  let minified = minifyLua(code);
+
   minified = minified.replace(/(["'])((?:\\.|(?!\1).)*)\1/g, (m, q, content) => {
-    const bytes = [];
-    for (let i = 0; i < content.length; i++) {
-      bytes.push(content.charCodeAt(i) ^ XOR_KEY);
-    }
+    const bytes = encryptStringBytes(content);
     return `__d({${bytes.join(',')}},${XOR_KEY})`;
   });
 
-  // 3. Header de descriptografia
   const header = `local function __d(t,k)local s={}for i=1,#t do s[i]=string.char(bit32.bxor(t[i],k))end return table.concat(s)end\n`;
-
   return header + minified;
 }
 
-function obfuscate() {
-  const input = document.getElementById('input').value;
-  const status = document.getElementById('status');
-  const btn = document.getElementById('btn');
+function obfuscateCode() {
+  const input = document.getElementById('input-code').value;
+  const status = document.getElementById('status-code');
+  const btn = document.getElementById('btn-code');
 
   if (!input.trim()) {
-    status.textContent = 'Cola algum código primeiro.';
+    status.textContent = 'Cole algum código primeiro.';
+    status.className = 'status err';
     return;
   }
 
   btn.disabled = true;
   status.textContent = 'Ofuscando...';
+  status.className = 'status';
 
-  try {
-    setTimeout(() => {
-      document.getElementById('output').value = obfuscateLua(input);
+  setTimeout(() => {
+    try {
+      const result = obfuscateLua(input);
+      document.getElementById('result-code').value = result;
+      document.getElementById('output-code').classList.add('visible');
       status.textContent = 'Pronto.';
-      btn.disabled = false;
-    }, 50);
-  } catch (e) {
-    status.textContent = 'Erro: ' + e.message;
+      status.className = 'status ok';
+      document.getElementById('output-code').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) {
+      status.textContent = 'Erro: ' + e.message;
+      status.className = 'status err';
+    }
     btn.disabled = false;
-  }
+  }, 60);
 }
 
-function copyOut() {
-  const out = document.getElementById('output');
+function copyCode() {
+  const out = document.getElementById('result-code');
   if (!out.value) return;
   out.select();
-  out.setSelectionRange(0, 99999);
+  out.setSelectionRange(0, 999999);
   document.execCommand('copy');
-  document.getElementById('status').textContent = 'Copiado.';
+  const s = document.getElementById('status-code');
+  s.textContent = 'Código copiado.';
+  s.className = 'status ok';
+}
+
+function downloadCode() {
+  const out = document.getElementById('result-code');
+  if (!out.value) return;
+  const blob = new Blob([out.value], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lc10ofuscardor.text';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  const s = document.getElementById('status-code');
+  s.textContent = 'Download iniciado.';
+  s.className = 'status ok';
+}
+
+/* ========== OFUSCADOR - LOADSTRING ========== */
+function obfuscateLoadstring() {
+  const input = document.getElementById('input-ls').value;
+  const keyInput = document.getElementById('key-ls').value.trim();
+  const status = document.getElementById('status-ls');
+  const btn = document.getElementById('btn-ls');
+
+  if (!input.trim()) {
+    status.textContent = 'Cole algum código primeiro.';
+    status.className = 'status err';
+    return;
+  }
+
+  if (!keyInput) {
+    status.textContent = 'Defina uma chave de criptografia.';
+    status.className = 'status err';
+    return;
+  }
+
+  btn.disabled = true;
+  status.textContent = 'Ofuscando loadstring...';
+  status.className = 'status';
+
+  setTimeout(() => {
+    try {
+      const obfuscated = obfuscateLua(input);
+
+      const bytes = new TextEncoder().encode(obfuscated);
+      const keyBytes = new TextEncoder().encode(keyInput);
+      const encryptedBytes = [];
+      for (let i = 0; i < bytes.length; i++) {
+        encryptedBytes.push(bytes[i] ^ keyBytes[i % keyBytes.length]);
+      }
+
+      const keyStr = keyInput.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+      const byteArray = encryptedBytes.join(',');
+
+      const loader = `-- LC10 • OFUSCADOR | Loadstring protegido
+-- Chave: ${keyInput}
+local __k = "${keyStr}"
+local __b = {${byteArray}}
+local __s = {}
+for __i = 1, #__b do
+    local __kb = string.byte(__k, (__i - 1) % #__k + 1)
+    __s[__i] = string.char(bit32.bxor(__b[__i], __kb))
+end
+local __code = table.concat(__s)
+local __fn, __err = loadstring(__code)
+if not __fn then
+    warn("[LC10] Erro ao carregar: " .. tostring(__err))
+else
+    __fn()
+end`;
+
+      document.getElementById('result-ls').value = loader;
+      document.getElementById('output-ls').classList.add('visible');
+      status.textContent = 'Pronto.';
+      status.className = 'status ok';
+      document.getElementById('output-ls').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) {
+      status.textContent = 'Erro: ' + e.message;
+      status.className = 'status err';
+    }
+    btn.disabled = false;
+  }, 60);
+}
+
+function copyLS() {
+  const out = document.getElementById('result-ls');
+  if (!out.value) return;
+  out.select();
+  out.setSelectionRange(0, 999999);
+  document.execCommand('copy');
+  const s = document.getElementById('status-ls');
+  s.textContent = 'Loader copiado.';
+  s.className = 'status ok';
+}
+
+function downloadLS() {
+  const out = document.getElementById('result-ls');
+  if (!out.value) return;
+  const blob = new Blob([out.value], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lc10ofuscardor.text';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  const s = document.getElementById('status-ls');
+  s.textContent = 'Download iniciado.';
+  s.className = 'status ok';
 }
 </script>
 
 </body>
-</html>
+ </html>
