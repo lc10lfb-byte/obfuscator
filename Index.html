@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC10 • OFUSCADOR</title>
+<style>
+body{background:#0a0a0a;color:#e0e0e0;font-family:sans-serif;padding:20px;margin:0}
+h1{color:#fff;font-size:20px}
+h1 span{color:#888;font-weight:400}
+.box{background:#131313;border:1px solid #222;border-radius:10px;padding:16px;margin-bottom:16px}
+textarea{width:100%;height:180px;background:#0f0f0f;color:#fff;border:1px solid #2a2a2a;border-radius:6px;padding:12px;font-family:monospace;font-size:13px;box-sizing:border-box}
+button{width:100%;padding:14px;font-size:15px;font-weight:700;background:#fff;color:#000;border:none;border-radius:8px;cursor:pointer;margin-top:10px}
+button:active{background:#ccc}
+#status{text-align:center;color:#888;font-size:13px;margin-top:8px;min-height:18px}
+#out-section{display:none}
+.hide{display:none}
+</style>
+</head>
+<body>
+
+<h1>LC10 <span>•</span> OFUSCADOR</h1>
+
+<div class="box">
+  <label>Entrada</label>
+  <textarea id="inp" placeholder="Cole seu script Lua aqui..."></textarea>
+  <button onclick="run()">Ofuscar</button>
+  <div id="status"></div>
+</div>
+
+<div class="box" id="out-section">
+  <label>Saída</label>
+  <button onclick="copyOut()">Copiar</button>
+  <textarea id="out" readonly></textarea>
+</div>
+
+<script>
+function run() {
+  var status = document.getElementById('status');
+  var inp = document.getElementById('inp').value;
+  if (!inp.trim()) {
+    status.textContent = 'Cole algum codigo primeiro.';
+    return;
+  }
+  status.textContent = 'Processando...';
+  try {
+    var result = obf(inp);
+    document.getElementById('out').value = result;
+    document.getElementById('out-section').style.display = 'block';
+    status.textContent = 'Pronto. ' + result.length + ' chars.';
+  } catch(e) {
+    status.textContent = 'Erro: ' + e.message;
+  }
+}
+
+function copyOut() {
+  var o = document.getElementById('out');
+  o.select();
+  o.setSelectionRange(0, 99999999);
+  document.execCommand('copy');
+  document.getElementById('status').textContent = 'Copiado.';
+}
+
+function obf(code) {
+  var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  var strings = [];
+  var idx = {};
+  var out = code.replace(/(["'])((?:\\.|(?!\1)[\s\S])*)\1/g, function(m, q, c) {
+    if (!(c in idx)) {
+      idx[c] = strings.length;
+      strings.push(c);
+    }
+    return '__S(' + idx[c] + ')';
+  });
+  var pool = strings.map(function(s) {
+    var bytes = [];
+    for (var i = 0; i < s.length; i++) {
+      var cc = s.charCodeAt(i);
+      if (cc < 128) { bytes.push(cc); }
+      else if (cc < 2048) { bytes.push(192|(cc>>6), 128|(cc&63)); }
+      else { bytes.push(224|(cc>>12), 128|((cc>>6)&63), 128|(cc&63)); }
+    }
+    var b64 = '';
+    for (var j = 0; j < bytes.length; j += 3) {
+      var b1 = bytes[j], b2 = bytes[j+1] || 0, b3 = bytes[j+2] || 0;
+      b64 += alpha[b1 >> 2];
+      b64 += alpha[((b1 & 3) << 4) | (b2 >> 4)];
+      b64 += (j + 1 < bytes.length) ? alpha[((b2 & 15) << 2) | (b3 >> 6)] : '=';
+      b64 += (j + 2 < bytes.length) ? alpha[b3 & 63] : '=';
+    }
+    return b64;
+  });
+  var poolLua = '{"' + pool.join('","') + '"}';
+  var header = 'local __P=' + poolLua + ' ';
+  header += 'local __A="' + alpha + '" ';
+  header += 'local function __S(i) ';
+  header += 'local s=__P[i+1] ';
+  header += 'local b={} ';
+  header += 'for j=1,#s do ';
+  header += 'local c=__A:find(s:sub(j,j),1,true)-1 ';
+  header += 'if c>=0 then b[#b+1]=c end ';
+  header += 'end ';
+  header += 'local bytes={} ';
+  header += 'for j=1,#b,4 do ';
+  header += 'local n1=b[j] or 0 ';
+  header += 'local n2=b[j+1] or 0 ';
+  header += 'local n3=b[j+2] or 0 ';
+  header += 'local n4=b[j+3] or 0 ';
+  header += 'bytes[#bytes+1]=string.char((n1*4)+math.floor(n2/16)) ';
+  header += 'if b[j+2] then bytes[#bytes+1]=string.char(((n2%16)*16)+math.floor(n3/4)) end ';
+  header += 'if b[j+3] then bytes[#bytes+1]=string.char(((n3%4)*64)+n4) end ';
+  header += 'end ';
+  header += 'local raw=table.concat(bytes) ';
+  header += 'local out={} ';
+  header += 'local i=1 ';
+  header += 'while i<=#raw do ';
+  header += 'local c=raw:byte(i) ';
+  header += 'if c<128 then out[#out+1]=string.char(c) i=i+1 ';
+  header += 'elseif c<224 then out[#out+1]=string.char(((c%32)*64)+(raw:byte(i+1)%64)) i=i+2 ';
+  header += 'else out[#out+1]=string.char(((c%16)*4096)+((raw:byte(i+1)%64)*64)+(raw:byte(i+2)%64)) i=i+3 end ';
+  header += 'end ';
+  header += 'return table.concat(out) ';
+  header += 'end ';
+  var body = out.replace(/__S\((\d+)\)/g, function(m, i) {
+    return '__S(' + i + ')';
+  });
+  return header + body;
+}
+</script>
+
+</body>
+</html>
